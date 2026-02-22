@@ -1,0 +1,479 @@
+/* Reseteo básico para que todo se vea igual en cualquier navegador */
+/* Reseteo básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* Cambiamos la fuente por defecto a Montserrat para todo el texto */
+    font-family: 'Montserrat', sans-serif; 
+}
+
+/* --- APLICA LA FUENTE DE IMPACTO A LOS TÍTULOS --- */
+h1, h2, h3, .logo-texto, .btn-pagar {
+    font-family: 'Anton', sans-serif;
+    text-transform: uppercase; /* Streetwear casi siempre usa mayúsculas en títulos */
+    letter-spacing: 1px; /* Un poco de espacio entre letras queda fino */
+}
+
+
+html {
+    scroll-behavior: smooth; /* ¡Esta es la magia! */
+}
+
+body {
+    background-color: #000000; /* Fondo negro profundo */
+    color: #ffffff; /* Texto blanco para contrastar */
+}
+
+/* --- ESTILOS DEL HEADER --- */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    background-color: #0a0a0a; /* Un negro ligeramente distinto para separar el menú */
+    border-bottom: 1px solid #333333; /* Una línea gris sutil */
+}
+
+.logo {
+    width: 80px; /* Puedes ajustar este tamaño según cómo se vea tu logo */
+    height: auto;
+    border-radius: 50%; /* Opcional: si quieres que la imagen sea perfectamente redonda */
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #888888; /* El texto se pone gris claro al pasar el ratón */
+}
+
+.btn-carrito {
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.btn-carrito:hover {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+/* --- ESTILOS DE LA SECCIÓN PRINCIPAL --- */
+.hero {
+    height: 80vh; /* Ocupa el 80% del alto de la pantalla */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* Aseguramos que el contenido del hero se apile verticalmente y centrado */
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Estilos específicos para el logo central */
+.hero-logo {
+    width: 180px; /* Tamaño ideal: presente pero equilibrado */
+    height: auto;
+    margin-bottom: 25px; /* Separación con el eslogan "Viste tu Fe" */
+    border-radius: 50%; /* Mantiene la forma circular del logo */
+    
+    /* Opcional: Le damos un brillo súper sutil para que resalte del fondo negro */
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.05); 
+    
+    /* Animación suave al cargar la página */
+    animation: aparecer 1s ease-in-out; 
+}
+
+/* Una pequeña animación para que el logo entre suavemente */
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Ajuste específico para el título gigante del Hero */
+
+.hero h1 {
+    font-size: 5rem;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    letter-spacing: 3px;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: #cccccc;
+    margin-bottom: 30px;
+}
+
+.cta-button {
+    padding: 15px 40px;
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    border-radius: 3px;
+    transition: background 0.3s;
+}
+
+.cta-button:hover {
+    background-color: #888888;
+}
+
+/* --- ESTILOS DEL CATÁLOGO (CUADRÍCULA) --- */
+.catalogo {
+    padding: 60px 50px;
+    background-color: #050505;
+}
+
+.titulo-seccion {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.grid-productos {
+    display: grid;
+    /* Esto hace que la cuadrícula sea responsive automáticamente */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+/* --- ESTILOS DE LA TARJETA DEL PRODUCTO --- */
+.producto {
+    background-color: #111111;
+    border: 1px solid #333333;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.producto:hover {
+    transform: translateY(-5px); /* Efecto para que la tarjeta suba un poquito al pasar el mouse */
+    border-color: #888888;
+}
+
+.producto img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover; /* Para que las imágenes no se deformen */
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.producto h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.precio {
+    font-size: 1.1rem;
+    color: #cccccc;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.btn-agregar {
+    width: 100%;
+    padding: 10px;
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: 0.3s;
+}
+
+.btn-agregar:hover {
+    background-color: #888888;
+}
+
+.selector-talla {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    background-color: #222222;
+    color: #ffffff;
+    border: 1px solid #444444;
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+}
+
+.selector-talla:focus {
+    border-color: #888888;
+}
+
+/* --- ESTILOS DEL CARRITO LATERAL --- */
+.carrito-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none; /* Oculto por defecto */
+    z-index: 99;
+}
+
+.carrito-panel {
+    position: fixed;
+    top: 0;
+    right: -400px; /* Escondido fuera de la pantalla a la derecha */
+    width: 350px;
+    height: 100vh;
+    background-color: #111111;
+    border-left: 1px solid #333333;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    transition: right 0.4s ease; /* La animación de deslizamiento */
+}
+
+/* Clase que le agregaremos con JS para que aparezca */
+.carrito-panel.abierto {
+    right: 0;
+}
+
+.carrito-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #333333;
+}
+
+.btn-cerrar {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.btn-cerrar:hover {
+    color: #ff3333; /* Un toque de rojo para cerrar */
+}
+
+.carrito-items {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.carrito-vacio {
+    text-align: center;
+    color: #888888;
+    margin-top: 20px;
+}
+
+/* Estilo para los productos dentro del carrito */
+.item-carrito {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #222222;
+    padding-bottom: 10px;
+}
+
+.item-info h4 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.item-precio {
+    color: #cccccc;
+    font-size: 0.9rem;
+}
+
+.btn-eliminar {
+    background-color: #ff3333;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.carrito-footer {
+    padding: 20px;
+    border-top: 1px solid #333333;
+}
+
+.total-container {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.btn-pagar {
+    width: 100%;
+    padding: 15px;
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.btn-pagar:hover {
+    background-color: #888888;
+}
+
+/* ==========================================
+   --- ESTILOS DE NOTIFICACIONES (TOAST) ---
+   ========================================== */
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999; /* Para que siempre esté por encima de todo */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    background-color: #111111;
+    color: #ffffff;
+    padding: 15px 25px;
+    border-left: 5px solid #ff3333; /* Borde rojo urbano por defecto */
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+    
+    /* Animación de entrada */
+    animation: entrarToast 0.4s ease-out forwards;
+}
+
+/* Si luego quieres usar una notificación de éxito (verde o blanca) */
+.toast.exito {
+    border-left-color: #ffffff; 
+}
+
+/* Animaciones clave */
+@keyframes entrarToast {
+    from {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes salirToast {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+}
+
+/* ==========================================
+   --- DISEÑO RESPONSIVO (CELULARES) ---
+   ========================================== */
+
+/* Por defecto (en PC), el botón de hamburguesa está oculto */
+.menu-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+/* Cuando la pantalla sea de 768px o menos (Tablets y Teléfonos) */
+@media (max-width: 768px) {
+    
+    /* 1. Ajustamos el espacio del header */
+    .header {
+        padding: 15px 20px;
+    }
+
+    /* 2. Mostramos el botón de hamburguesa */
+    .menu-toggle {
+        display: block;
+        order: -1; /* Lo pone de primero a la izquierda */
+    }
+
+    /* 3. Escondemos el menú normal y lo preparamos para deslizarse */
+    .nav-links {
+        position: fixed;
+        top: 70px; /* Justo debajo del header */
+        left: -100%; /* Escondido fuera de la pantalla por la izquierda */
+        width: 100%;
+        background-color: #111111;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 0;
+        transition: left 0.4s ease; /* Transición suave */
+        border-bottom: 1px solid #333333;
+        z-index: 98;
+    }
+
+    /* 4. Esta clase se la agregaremos con JavaScript para mostrar el menú */
+    .nav-links.activo {
+        left: 0; 
+    }
+
+    .nav-links li {
+        margin: 15px 0;
+    }
+
+    /* 5. Achicamos un poco el título principal para que no se desborde */
+    .hero h1 {
+        font-size: 3rem;
+    }
+    
+    /* 6. El carrito lateral ocupará toda la pantalla en móviles */
+    .carrito-panel {
+        width: 100%;
+        right: -100%;
+    }
+}

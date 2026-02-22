@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zahara Church Store</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo-container">
+            <h2 class="logo-texto">ZAHARA</h2> 
+        </div>
+
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+
+        <nav class="navbar">
+            <ul class="nav-links">
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#coleccion">Colección</a></li>
+                <li><a href="#">Contacto</a></li>
+            </ul>
+        </nav>
+        <div class="cart-icon">
+            <button class="btn-carrito">🛒 Carrito (0)</button>
+        </div>
+    </header>
+
+    <main class="hero">
+        <div class="hero-content">
+            <img src="assets/img/logo.jpeg" alt="Zahara Church Store Logo" class="hero-logo">
+            
+            <h1>Viste tu Fe</h1>
+            <p>Diseños con propósito y estilo urbano.</p>
+            <a href="#coleccion"><button class="cta-button">Ver Catálogo</button></a>
+        </div>
+    </main>
+
+    <section class="catalogo" id="coleccion">
+        <h2 class="titulo-seccion">Nueva Colección</h2>
+        <div class="grid-productos" id="contenedor-productos"></div>
+    </section>
+
+<div class="carrito-overlay" id="carrito-overlay"></div>
+    <aside class="carrito-panel" id="carrito-panel">
+        <div class="carrito-header">
+            <h2>Tu Pedido</h2>
+            <button class="btn-cerrar" id="btn-cerrar">✕</button>
+        </div>
+        
+        <div class="carrito-items" id="carrito-items">
+            <p class="carrito-vacio">El carrito está vacío.</p>
+        </div>
+
+        <div class="carrito-footer">
+            <div class="total-container">
+                <span>Total:</span>
+                <span id="carrito-total">$0.00</span>
+            </div>
+            <button class="btn-pagar">Proceder al Pago</button>
+        </div>
+    </aside>
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="js/app.js"></script>
+
+    </body>
+</html>
