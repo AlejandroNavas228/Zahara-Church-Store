@@ -395,29 +395,117 @@ body {
     border-left-color: #ffffff; 
 }
 
-/* Animaciones clave */
-@keyframes entrarToast {
-    from {
-        transform: translateX(120%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
+/* --- ESTILOS DEL FOOTER Y REDES --- */
+
+/* Hace que el scroll sea suave al bajar */
+/* --- ESTILOS DEL FOOTER (Diseño Original Mejorado) --- */
+footer {
+    background-color: #000; /* Fondo negro puro */
+    color: #fff;
+    padding: 40px 20px 20px; /* Más espacio arriba, menos abajo */
+    text-align: center;
+    margin-top: auto; /* Si usas flex en el body, esto lo empuja al final */
 }
 
-@keyframes salirToast {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(120%);
-        opacity: 0;
-    }
+.contenedor-footer {
+    max-width: 900px; /* Un poco más ancho para las columnas */
+    margin: 0 auto 30px; /* Centrado y margen inferior */
+    display: flex;
+    justify-content: space-between; /* Separa las columnas */
+    align-items: flex-start; /* Alinea al inicio arriba */
+    gap: 20px;
+    flex-wrap: wrap; /* Para que se adapte en celulares */
 }
 
+.footer-columna {
+    flex: 1; /* Ambas columnas ocupan el mismo espacio */
+    min-width: 250px; /* Ancho mínimo para que no se aplasten */
+    text-align: left; /* Texto alineado a la izquierda en cada columna */
+}
+
+/* Títulos de las columnas (ZAHARA y CONTACTO) */
+.footer-columna h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.footer-columna p {
+    font-size: 0.9rem;
+    color: #ccc; /* Un gris claro para el texto descriptivo */
+    line-height: 1.5;
+}
+
+/* --- Estilos de los Enlaces de Contacto (Pequeños e Integrados) --- */
+.enlaces-contacto {
+    display: flex;
+    flex-direction: column; /* Uno debajo del otro */
+    gap: 10px; /* Espacio entre las líneas */
+}
+
+.enlace-icono {
+    text-decoration: none;
+    color: #fff; /* Blanco por defecto, como texto normal */
+    display: inline-flex; /* Para que el icono y texto estén alineados */
+    align-items: center;
+    gap: 8px; /* Espacio entre icono y texto */
+    font-size: 0.95rem;
+    transition: color 0.3s, transform 0.2s;
+}
+
+/* Iconos un poco más grandes para que destaquen */
+.enlace-icono i {
+    font-size: 1.1rem;
+}
+
+/* Efecto Hover General */
+.enlace-icono:hover {
+    transform: translateX(5px); /* Un pequeño movimiento a la derecha */
+}
+
+/* Colores específicos al pasar el mouse */
+.enlace-icono.insta:hover {
+    color: #E1306C; /* Color oficial de Instagram */
+}
+
+.enlace-icono.whats:hover {
+    color: #25D366; /* Color oficial de WhatsApp */
+}
+
+/* --- Barra Inferior (Copyright y Firma) --- */
+.barra-inferior {
+    border-top: 1px solid #333; /* Línea separadora sutil */
+    padding-top: 20px;
+    font-size: 0.8rem;
+    color: #888;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.firma-dev strong {
+    color: #fff; /* Tu nombre en blanco para destacar */
+    font-weight: 600;
+}
+
+/* Ajuste para celulares: columnas se apilan y texto se centra */
+@media (max-width: 600px) {
+    .contenedor-footer {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .footer-columna {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    .enlaces-contacto {
+        align-items: center; /* Centrar los enlaces en celular */
+    }
+}
 /* ==========================================
    --- DISEÑO RESPONSIVO (CELULARES) ---
    ========================================== */
@@ -539,5 +627,40 @@ body {
     .carrito-panel {
         width: 100%;
         right: -100%;
+    }
+}
+
+/* --- AJUSTES DEL LOGO EN FOOTER --- */
+
+/* Contenedor para alinear Logo y Texto */
+.marca-container {
+    display: flex;
+    align-items: center; /* Centra verticalmente */
+    gap: 15px; /* Espacio entre el logo y el texto ZAHARA */
+    margin-bottom: 15px;
+}
+
+/* El logo en sí */
+.logo-footer {
+    width: 50px; /* Tamaño discreto (ajusta si lo quieres más grande) */
+    height: auto; /* Mantiene la proporción */
+    filter: grayscale(100%) brightness(200%); /* TRUCO PRO: Lo vuelve blanco automáticamente */
+    transition: filter 0.3s ease;
+}
+
+/* Si pasas el mouse por el logo, recupera su color original */
+.logo-footer:hover {
+    filter: none;
+}
+
+/* Ajuste para que el título ZAHARA no tenga margen extra */
+.footer-columna h3 {
+    margin-bottom: 0; /* Quitamos el margen de abajo para que quede alineado con el logo */
+}
+
+/* Ajuste para móviles */
+@media (max-width: 600px) {
+    .marca-container {
+        justify-content: center; /* Centrar logo y texto en celulares */
     }
 }

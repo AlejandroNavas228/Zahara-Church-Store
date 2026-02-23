@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zahara Church Store</title>
+    <link rel="icon" type="image/png" href="assets/img/logo.jpeg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -21,7 +23,7 @@
             <ul class="nav-links">
                 <li><a href="#">Inicio</a></li>
                 <li><a href="#coleccion">Colección</a></li>
-                <li><a href="#">Contacto</a></li>
+                <li><a href="#contacto">Contacto</a></li>
             </ul>
         </nav>
         <div class="cart-icon">
@@ -44,24 +46,35 @@
         <div class="grid-productos" id="contenedor-productos"></div>
     </section>
 
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-info">
-                <h2 class="logo-texto">ZAHARA</h2>
-                <p>Diseños con propósito y estilo urbano.</p>
+    <footer id="contacto">
+    <div class="contenedor-footer">
+        <div class="footer-columna izquierda">
+            <div class="marca-container">
+                <img src="assets/img/logo.jpeg" alt="Logo Zahara" class="logo-footer">
+                <h3>ZAHARA</h3>
             </div>
-            
-            <div class="footer-links">
-                <h3>Contacto</h3>
-                <p>Instagram: <a href="#" target="_blank">@zaharachurch</a></p>
-                <p>WhatsApp: +58 000 000 0000</p>
-            </div>
+            <p>Diseños con propósito y estilo urbano.</p>
         </div>
         
-        <div class="footer-bottom">
-            <p>&copy; <a href="login.html" style="color: inherit; text-decoration: none; cursor: default;">2026</a> Zahara Church Store. Todos los derechos reservados.</p>
-            <p class="firma-dev">Desarrollado por <strong>Alejandro Navas</strong></p>
+        <div class="footer-columna derecha">
+            <h3>CONTACTO</h3>
+            <div class="enlaces-contacto">
+                <a href="https://www.instagram.com/zahara_cs/?utm_source=ig_web_button_share_sheet" target="_blank" class="enlace-icono insta">
+                    <i class="fa-brands fa-instagram"></i> Instagram: @zahara_cs
+                </a>
+                <a href="https://wa.me/584143894452" target="_blank" class="enlace-icono whats">
+                    <i class="fa-brands fa-whatsapp"></i> WhatsApp: +58 414 389 4452
+                </a>
+            </div>
         </div>
+    </div>
+    
+    <div class="barra-inferior">
+        <p class="copyright">
+            &copy; <a href="login.html" style="text-decoration: none; color: inherit; cursor: default;">2026</a> Zahara Church Store. Todos los derechos reservados.
+        </p>
+        <p class="firma-dev">Desarrollado por <strong>Alejandro Navas</strong></p>
+    </div>
     </footer>
 
 <div class="carrito-overlay" id="carrito-overlay"></div>
