@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Admin | Zahara</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos rápidos solo para centrar el login */
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-box {
+            background-color: #111111;
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid #333333;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 0, 0, 0.1);
+        }
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            background: #222222;
+            border: 1px solid #444444;
+            color: white;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-box">
+        <h2 class="logo-texto" style="margin-bottom: 20px;">ZAHARA ADMIN</h2>
+        <p style="color: #888; margin-bottom: 30px;">Ingresa tus credenciales para continuar</p>
+        
+        <form id="form-login">
+            <input type="text" id="usuario" placeholder="Usuario" required>
+            <input type="password" id="password" placeholder="Contraseña" required>
+            <button type="submit" class="btn-pagar">Entrar</button>
+        </form>
+        <p id="mensaje-error" style="color: #ff3333; margin-top: 15px; display: none;">Usuario o contraseña incorrectos</p>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

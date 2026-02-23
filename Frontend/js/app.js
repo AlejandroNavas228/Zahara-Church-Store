@@ -1,12 +1,18 @@
 // 1. Array de productos temporales
-const productos = [
-    { id: 1, nombre: "Camisa Fuego Urbano", precio: 25.00, imagen: "assets/img/3.jpeg" },
-    { id: 2, nombre: "Camisa León Fe", precio: 25.00, imagen: "assets/img/4.jpeg" },
-    { id: 3, nombre: "Camisa Zarza", precio: 20.00, imagen: "assets/img/5.jpeg" },
-    { id: 4, nombre: "Hoodie Cruz", precio: 35.00, imagen: "assets/img/6.jpeg" },
-    { id: 5, nombre: "Camisa Gracia", precio: 22.00, imagen: "assets/img/7.jpeg" },
-    { id: 6, nombre: "Camisa Espíritu", precio: 22.00, imagen: "assets/img/8.jpeg" }
-];
+// 1. Array vacío que se llenará con la base de datos
+let productos = []; 
+
+// Función para buscar los productos reales en el servidor
+async function cargarProductos() {
+    try {
+       const respuesta = await fetch('https://zahara-api.onrender.com/api/productos');
+        productos = await respuesta.json(); // Llenamos el array con los datos reales
+        
+        renderizarProductos(); // Dibujamos los productos en pantalla
+    } catch (error) {
+        console.error("Error al cargar el catálogo:", error);
+    }
+}
 
 const contenedorProductos = document.getElementById('contenedor-productos');
 let carrito = JSON.parse(localStorage.getItem('carritoZahara')) || [];
@@ -47,7 +53,7 @@ function mostrarNotificacion(mensaje, tipo = 'error') {
     const toast = document.createElement('div');
     toast.classList.add('toast');
     if (tipo === 'exito') toast.classList.add('exito');
-    
+
     // Le metemos el texto
     toast.innerText = mensaje;
     
@@ -226,3 +232,7 @@ btnPagar.addEventListener('click', () => {
     // Opcional: Cerrar el carrito después de enviar
     cerrarCarrito();
 });
+
+// Ejecutamos al inicio
+cargarProductos();
+actualizarCarrito();

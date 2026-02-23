@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control | Zahara</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        // Si no hay un "permiso" guardado en el navegador, lo devolvemos al login
+        if (localStorage.getItem('zaharaAdminLogueado') !== 'true') {
+            window.location.href = 'login.html';
+        }
+    </script>
+</head>
+<body style="background-color: #050505; color: #fff;">
+
+    <header class="header">
+        <div class="logo-container">
+            <h2 class="logo-texto">ZAHARA ADMIN</h2> 
+        </div>
+        <nav class="navbar">
+            <ul class="nav-links">
+                <li><a href="index.html">Ver Tienda</a></li>
+                <li><a href="#" style="color: #ff3333;" onclick="localStorage.removeItem('zaharaAdminLogueado'); window.location.href='login.html';">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="catalogo" style="padding: 40px 20px;">
+        <h2 class="titulo-seccion">Agregar Nuevo Producto</h2>
+        
+        <form id="form-admin" style="max-width: 500px; margin: 0 auto; background: #111; padding: 30px; border-radius: 8px; border: 1px solid #333;">
+            
+            <div style="margin-bottom: 20px;">
+                <label for="nombre-producto" style="display: block; margin-bottom: 8px; font-weight: bold;">Nombre de la Camisa:</label>
+                <input type="text" id="nombre-producto" required style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 4px;">
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label for="precio-producto" style="display: block; margin-bottom: 8px; font-weight: bold;">Precio ($):</label>
+                <input type="number" id="precio-producto" step="0.01" required style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 4px;">
+            </div>
+
+           <div style="margin-bottom: 20px;">
+                <label for="imagen-producto" style="display: block; margin-bottom: 8px; font-weight: bold;">Sube la foto de la camisa:</label>
+                <input type="file" id="imagen-producto" accept="image/*" required style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 4px;">
+            </div>
+
+            <button type="submit" class="btn-pagar" style="width: 100%; margin-top: 10px;">Guardar Producto</button>
+        </form>
+
+        <h2 class="titulo-seccion" style="margin-top: 60px;">Inventario Actual</h2>
+        
+        <div style="max-width: 800px; margin: 0 auto; overflow-x: auto;">
+            <table style="width: 100%; background: #111; color: white; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #333; background: #222;">
+                        <th style="padding: 12px;">Foto</th>
+                        <th style="padding: 12px;">Nombre</th>
+                        <th style="padding: 12px;">Precio</th>
+                        <th style="padding: 12px;">Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-productos">
+                    </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
