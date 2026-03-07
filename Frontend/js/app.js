@@ -5,7 +5,7 @@ let productos = [];
 // Función para buscar los productos reales en el servidor
 async function cargarProductos() {
     try {
-       const respuesta = await fetch('https://zahara-api.onrender.com/api/productos');
+       const respuesta = await fetch('https://api.zaharachurch.store/api/productos');
         productos = await respuesta.json(); // Llenamos el array con los datos reales
         
         renderizarProductos(); // Dibujamos los productos en pantalla
