@@ -19,7 +19,7 @@ if (formLogin) {
 
         try {
             // Petición al servidor para verificar contraseña
-            const respuesta = await fetch('https://api.zaharachurch.store/api/login', { 
+            const respuesta = await fetch('https://zahara-api.onrender.com/api/login', { 
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ usuario: usuarioInput, password: passwordInput })
@@ -80,7 +80,7 @@ if (formAdmin) {
         formData.append('imagen', archivoImagen);
 
         try {
-            const respuesta = await fetch('https://api.zaharachurch.store/api/productos', {
+            const respuesta = await fetch('https://zahara-api.onrender.com/api/productos', {
                 method: 'POST',
                 body: formData
             });
@@ -114,7 +114,7 @@ async function cargarProductosAdmin() {
     if (!cuerpoTabla) return; // Si no hay tabla, no hacemos nada
 
     try {
-        const respuesta = await fetch('https://api.zaharachurch.store/api/productos');
+        const respuesta = await fetch('https://zahara-api.onrender.com/api/productos');
         const productos = await respuesta.json();
         
         cuerpoTabla.innerHTML = ''; // Limpiar tabla
@@ -143,7 +143,7 @@ async function cargarProductosAdmin() {
 async function eliminarProducto(id) {
     if (confirm("¿Seguro que quieres borrar esta camisa?")) {
         try {
-            const respuesta = await fetch(`https://api.zaharachurch.store/api/productos/${id}`, {
+            const respuesta = await fetch(`https://zahara-api.onrender.com/api/productos/${id}`, {
                 method: 'DELETE'
             });
             
