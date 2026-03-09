@@ -59,7 +59,7 @@ body {
     color: #888888; /* El texto se pone gris claro al pasar el ratón */
 }
 
-.btn-carrito {
+/* .btn-carrito {
     background: transparent;
     color: #ffffff;
     border: 1px solid #ffffff;
@@ -72,7 +72,7 @@ body {
 .btn-carrito:hover {
     background-color: #ffffff;
     color: #000000;
-}
+} */
 
 /* --- ESTILOS DE LA SECCIÓN PRINCIPAL --- */
 .hero {
@@ -578,6 +578,26 @@ footer {
 
 .firma-dev strong {
     color: #888;
+}
+
+/* --- BOTÓN DEL CARRITO --- */
+.btn-carrito {
+    background: none; 
+    border: none; 
+    color: #ffffff; /* Color del icono y texto */
+    font-size: 1.1rem;
+    cursor: pointer; 
+    font-family: 'Montserrat', sans-serif;
+    transition: transform 0.2s ease, color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espacio entre la bolsita y el (0) */
+    padding: 0; /* Quita espacios invisibles que traen los botones por defecto */
+}
+
+.btn-carrito:hover {
+    transform: scale(1.1); /* Efecto de crecimiento suave */
+    color: #cccccc; /* Cambia a un tono gris claro al pasar el mouse */
 }
 
 /* Cuando la pantalla sea de 768px o menos (Tablets y Teléfonos) */

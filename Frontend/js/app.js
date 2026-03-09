@@ -152,7 +152,7 @@ function actualizarCarrito() {
     if (carrito.length === 0) {
         contenedorItemsCarrito.innerHTML = '<p class="carrito-vacio">El carrito está vacío.</p>';
         totalCarritoDOM.innerText = '$0.00';
-        document.querySelector('.btn-carrito').innerText = `🛒 Carrito (0)`;
+        document.querySelector('.btn-carrito').innerHTML = `<i class="fa-solid fa-bag-shopping"></i> (${carrito.length})`;
         return;
     }
 
@@ -174,7 +174,7 @@ function actualizarCarrito() {
     });
 
     totalCarritoDOM.innerText = `$${total.toFixed(2)}`;
-    document.querySelector('.btn-carrito').innerText = `🛒 Carrito (${carrito.length})`;
+    document.querySelector('.btn-carrito').innerHTML = `<i class="fa-solid fa-bag-shopping"></i> (${carrito.length})`;
 }
 
 // 5. Eliminar del carrito
