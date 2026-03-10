@@ -600,6 +600,22 @@ footer {
     color: #cccccc; /* Cambia a un tono gris claro al pasar el mouse */
 }
 
+/* --- ESTILO PARA CUANDO NO HAY PRODUCTOS --- */
+.anuncio-vacio {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 40px 20px;
+}
+
+.anuncio-vacio img {
+    max-width: 500px; /* Tamaño máximo para que no se vea gigante en PC */
+    width: 100%;      /* Se adapta a la pantalla del celular */
+    border-radius: 10px; /* Bordes un poco redondeados */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5); /* Una sombra elegante */
+}
+
 /* Cuando la pantalla sea de 768px o menos (Tablets y Teléfonos) */
 @media (max-width: 768px) {
     
@@ -650,6 +666,7 @@ footer {
     }
 }
 
+
 /* --- AJUSTES DEL LOGO EN FOOTER --- */
 
 /* Contenedor para alinear Logo y Texto */
@@ -685,18 +702,3 @@ footer {
     }
 }
 
-/* --- ESTILO PARA CUANDO NO HAY PRODUCTOS --- */
-.anuncio-vacio {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    padding: 40px 20px;
-}
-
-.anuncio-vacio img {
-    max-width: 500px; /* Tamaño máximo para que no se vea gigante en PC */
-    width: 100%;      /* Se adapta a la pantalla del celular */
-    border-radius: 10px; /* Bordes un poco redondeados */
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5); /* Una sombra elegante */
-}
