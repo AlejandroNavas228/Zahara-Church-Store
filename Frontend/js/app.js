@@ -5,10 +5,27 @@ let productos = [];
 // Función para buscar los productos reales en el servidor
 async function cargarProductos() {
     try {
-       const respuesta = await fetch('https://api.zaharachurch.store/api/productos');
+        const respuesta = await fetch('https://api.zaharachurch.store/api/productos');
         productos = await respuesta.json(); // Llenamos el array con los datos reales
         
-        renderizarProductos(); // Dibujamos los productos en pantalla
+        // --- LA MAGIA DEL ANUNCIO ---
+        if (productos.length === 0) {
+            // OJO: Cambia 'contenedor-productos' por el ID real donde se dibujan tus camisas
+            const contenedor = document.getElementById('contenedor-productos');
+            
+            if (contenedor) {
+                contenedor.innerHTML = `
+                    <div class="anuncio-vacio">
+                        <img src="assets/img/Anuncio.webp" alt="Próximamente nueva mercancía">
+                    </div>
+                `;
+            }
+            return; // 🛑 Frenamos aquí. No llamamos a renderizarProductos()
+        }
+
+        // Si SÍ hay productos, seguimos el flujo normal
+        renderizarProductos(); 
+        
     } catch (error) {
         console.error("Error al cargar el catálogo:", error);
     }

@@ -684,3 +684,19 @@ footer {
         justify-content: center; /* Centrar logo y texto en celulares */
     }
 }
+
+/* --- ESTILO PARA CUANDO NO HAY PRODUCTOS --- */
+.anuncio-vacio {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 40px 20px;
+}
+
+.anuncio-vacio img {
+    max-width: 500px; /* Tamaño máximo para que no se vea gigante en PC */
+    width: 100%;      /* Se adapta a la pantalla del celular */
+    border-radius: 10px; /* Bordes un poco redondeados */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5); /* Una sombra elegante */
+}
