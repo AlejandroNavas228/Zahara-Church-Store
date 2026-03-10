@@ -1,6 +1,6 @@
 // 1. Configuración de la URL del Servidor
 // Mientras trabajas en tu PC, usamos localhost. 
-const API_URL = "https://zahara-api.onrender.com/api"; // Cambia a tu URL de Render cuando esté desplegado
+const API_URL = "https://zahara-api.onrender.com"; // Cambia a tu URL de Render cuando esté desplegado
 
 let productos = []; 
 

@@ -1,5 +1,5 @@
 // Definimos la URL de tu nuevo servidor local
-const API_URL = 'https://zahara-api.onrender.com/api'; // Cambia a tu URL de Render cuando esté desplegado
+const API_URL = 'https://zahara-api.onrender.com'; // Cambia a tu URL de Render cuando esté desplegado
 
 // ==========================================
 // 1. LÓGICA DE LOGIN (SEGURIDAD)
