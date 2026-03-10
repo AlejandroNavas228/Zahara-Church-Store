@@ -1,10 +1,12 @@
+// Definimos la URL de tu nuevo servidor local
+const API_URL = 'https://zahara-api.onrender.com/api'; // Cambia a tu URL de Render cuando esté desplegado
+
 // ==========================================
 // 1. LÓGICA DE LOGIN (SEGURIDAD)
 // ==========================================
 const formLogin = document.getElementById('form-login');
 const mensajeError = document.getElementById('mensaje-error');
 
-// Si estamos en la pantalla de Login
 if (formLogin) {
     formLogin.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -18,8 +20,8 @@ if (formLogin) {
         mensajeError.style.display = 'none';
 
         try {
-            // Petición al servidor para verificar contraseña
-            const respuesta = await fetch('https://zahara-api.onrender.com/api/login', { 
+            // Apuntamos a tu servidor local
+            const respuesta = await fetch(`${API_URL}/api/login`, { 
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ usuario: usuarioInput, password: passwordInput })
@@ -51,7 +53,6 @@ if (formLogin) {
 // ==========================================
 const formAdmin = document.getElementById('form-admin');
 
-// Si estamos en el Panel de Administración
 if (formAdmin) {
     
     // A) CARGAR LA TABLA AL INICIAR
@@ -71,16 +72,18 @@ if (formAdmin) {
             return;
         }
 
-        btnGuardar.innerText = "Procesando...";
+        btnGuardar.innerText = "Procesando... 🚀"; // Un pequeño toque visual
         btnGuardar.disabled = true;
 
         const formData = new FormData();
         formData.append('nombre', nombre);
-        formData.append('precio', precio);
+        // IMPORTANTE: Ahora el backend espera que esto se llame 'precio_usd'
+        formData.append('precio_usd', precio); 
         formData.append('imagen', archivoImagen);
 
         try {
-            const respuesta = await fetch('https://zahara-api.onrender.com/api/productos', {
+            // Usamos la ruta protegida de admin que creamos
+            const respuesta = await fetch(`${API_URL}/api/admin/productos`, {
                 method: 'POST',
                 body: formData
             });
@@ -90,9 +93,9 @@ if (formAdmin) {
             if (respuesta.ok) {
                 alert("✅ " + resultado.mensaje);
                 formAdmin.reset();
-                cargarProductosAdmin(); // <--- Aquí es donde fallaba antes
+                cargarProductosAdmin(); 
             } else {
-                alert("❌ Error: " + resultado.error);
+                alert("❌ Error: " + (resultado.error || "Revisa la terminal"));
             }
 
         } catch (error) {
@@ -111,24 +114,25 @@ if (formAdmin) {
 
 async function cargarProductosAdmin() {
     const cuerpoTabla = document.getElementById('tabla-productos');
-    if (!cuerpoTabla) return; // Si no hay tabla, no hacemos nada
+    if (!cuerpoTabla) return; 
 
     try {
-        const respuesta = await fetch('https://zahara-api.onrender.com/api/productos');
+        const respuesta = await fetch(`${API_URL}/api/productos`);
         const productos = await respuesta.json();
         
-        cuerpoTabla.innerHTML = ''; // Limpiar tabla
+        cuerpoTabla.innerHTML = ''; 
 
         productos.forEach(producto => {
             const fila = document.createElement('tr');
             fila.style.borderBottom = "1px solid #333";
 
+            // Usamos producto.precio_usd en lugar de producto.precio
             fila.innerHTML = `
                 <td style="padding: 10px;">
                     <img src="${producto.imagen}" alt="${producto.nombre}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
                 </td>
                 <td style="padding: 10px;">${producto.nombre}</td>
-                <td style="padding: 10px;">$${producto.precio.toFixed(2)}</td>
+                <td style="padding: 10px;">$${producto.precio_usd.toFixed(2)}</td>
                 <td style="padding: 10px;">
                     <button onclick="eliminarProducto(${producto.id})" style="background: #ff3333; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; font-weight: bold;">Borrar</button>
                 </td>
@@ -143,13 +147,13 @@ async function cargarProductosAdmin() {
 async function eliminarProducto(id) {
     if (confirm("¿Seguro que quieres borrar esta camisa?")) {
         try {
-            const respuesta = await fetch(`https://zahara-api.onrender.com/api/productos/${id}`, {
+            const respuesta = await fetch(`${API_URL}/api/admin/productos/${id}`, {
                 method: 'DELETE'
             });
             
             if (respuesta.ok) {
                 alert("🗑️ Producto eliminado");
-                cargarProductosAdmin(); // Recargar tabla
+                cargarProductosAdmin(); 
             } else {
                 alert("Error al eliminar");
             }
