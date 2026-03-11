@@ -1,13 +1,13 @@
 // 1. Configuración de la URL del Servidor
 // Mientras trabajas en tu PC, usamos localhost. 
-const API_URL = "https://zahara-api.onrender.com/api"; // Cambia a tu URL de Render cuando esté desplegado
+const API_URL = "https://zahara-api.onrender.com"; 
 
 let productos = []; 
 
 // Función para buscar los productos reales en el servidor NEON y Prisma
 async function cargarProductos() {
     try {
-        const respuesta = await fetch(`${API_URL}/productos`);
+        const respuesta = await fetch(`${API_URL}/api/productos`);
         const datosRaw = await respuesta.json(); 
 
         // Mapeamos los datos de la base de datos para que el frontend los entienda
@@ -180,8 +180,8 @@ function eliminarDelCarrito(idUnico) {
 }
 
 // 5. LÓGICA DE WHATSAPP
+// 5. REDIRIGIR A LA PASARELA DE PAGO (Checkout)
 const btnPagar = document.querySelector('.btn-pagar');
-const numeroTelefono = "584143894452"; 
 
 if (btnPagar) {
     btnPagar.addEventListener('click', () => {
@@ -190,18 +190,8 @@ if (btnPagar) {
             return;
         }
 
-        let mensaje = "¡Hola Zahara Church Store! 🔥 Quiero realizar el siguiente pedido:%0A%0A";
-        carrito.forEach((item, index) => {
-            mensaje += `${index + 1}. ${item.nombre} (Talla: ${item.talla}) | $${item.precio.toFixed(2)}%0A`;
-        });
-
-        const totalFinal = totalCarritoDOM.innerText;
-        mensaje += `%0A*TOTAL A PAGAR: ${totalFinal}*`;
-        mensaje += "%0A%0A¿Quedo atento a los métodos de pago!";
-
-        const urlWhatsApp = `https://wa.me/${numeroTelefono}?text=${mensaje}`;
-        window.open(urlWhatsApp, '_blank');
-        cerrarCarrito();
+        // En lugar de abrir WhatsApp, mandamos al cliente a la página de pagos
+        window.location.href = 'checkout.html'; 
     });
 }
 

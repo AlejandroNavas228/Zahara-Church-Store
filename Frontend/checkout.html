@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago Seguro - Zahara Store</title>
+    <link rel="stylesheet" href="css/style.css"> 
+    <link rel="stylesheet" href="css/checkout.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta property="og:title" content="Zahara Church Store 🔥">
+    <meta property="og:description" content="Descubre nuestra nueva colección. Ropa con propósito y el mejor estilo. ¡Compra online ahora!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://zaharachurch.store">
+    <meta property="og:image" content="assets/img/logo.jpeg">
+</head>
+<body class="bg-checkout">
+
+    <div style="max-width: 1000px; margin: 20px auto 0; padding: 0 20px;">
+        <a href="index.html" style="text-decoration: none; color: #28a745; font-size: 1em; font-weight: bold; transition: 0.3s;">
+            <i class="fa-solid fa-chevron-left"></i> Volver a la tienda
+        </a>
+    </div>
+
+    <header class="checkout-header">
+        <h1>ZAHARA STORE</h1>
+    </header>
+
+    <div class="checkout-container">
+        <div class="checkout-left">
+            
+            <section class="checkout-section">
+                <h2>1. Datos de Contacto</h2>
+                <input type="text" id="cliente-nombre" class="input-checkout" placeholder="Tu Nombre y Apellido" required>
+                <input type="text" id="cliente-telefono" class="input-checkout" placeholder="Teléfono (WhatsApp)" required>
+            </section>
+
+            <section class="checkout-section">
+                <h2>2. Método de Pago</h2>
+                <p class="subtitle">Todas las transacciones son seguras y están encriptadas.</p>
+                
+                <div id="contenedor-tasa" style="background: #222; padding: 15px; border-radius: 5px; margin-bottom: 20px; border-left: 4px solid #28a745; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: bold; color: #fff;">🇪🇺 Tasa Euro BCV:</span> 
+                    <span id="tasa-bcv-texto" style="color: #28a745; font-weight: bold; font-size: 1.1em;">Cargando...</span>
+                </div>
+<div class="opciones-pago">
+                    <label class="radio-label">
+                        <input type="radio" name="metodo_pago" value="pagomovil" checked> 
+                        <span>Pago Móvil (Bs)</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="metodo_pago" value="binance"> 
+                        <span>Binance (USDT)</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="metodo_pago" value="paypal"> 
+                        <span>PayPal (USD)</span>
+                    </label>
+                </div>
+
+                <div id="formulario-pagomovil" class="payment-method-box active">
+                    <p class="instrucciones-pago">📱 <strong>Transfiere a:</strong> 0414-3723841 | V-30538718 | Venezuela (0102)</p>
+                    
+                    <select id="banco-origen" class="input-checkout">
+                        <option value="">Selecciona tu banco de origen...</option>
+                        <option value="0102 - Banco de Venezuela">0102 - Banco de Venezuela</option>
+                        <option value="0104 - Venezolano de Crédito">0104 - Venezolano de Crédito</option>
+                        <option value="0105 - Mercantil">0105 - Mercantil</option>
+                        <option value="0108 - Provincial">0108 - Provincial</option>
+                        <option value="0134 - Banesco">0134 - Banesco</option>
+                        <option value="0172 - Bancamiga">0172 - Bancamiga</option>
+                        <option value="0191 - BNC">0191 - BNC</option>
+                        <option value="Otro">Otro Banco</option>
+                    </select>
+                    
+                    <input type="text" id="referencia-pagomovil" class="input-checkout" placeholder="N° de Referencia (Ej: 12345678)">
+                    <input type="number" id="monto-pagomovil" class="input-checkout" placeholder="Monto exacto en Bs que transferiste">
+                </div>
+
+                <div id="formulario-binance" class="payment-method-box" style="display: none;">
+                    <p class="instrucciones-pago">🟡 <strong>Transfiere USDT a:</strong><br>Email: zahara@gmail.com<br>Pay ID: 123456789</p>
+                    <input type="text" id="referencia-binance" class="input-checkout" placeholder="Tu usuario de Binance o N° de Referencia">
+                </div>
+
+                <div id="formulario-paypal" class="payment-method-box" style="display: none;">
+                    <p class="instrucciones-pago">🔵 <strong>Envía USD a:</strong><br>Email: zahara.paypal@gmail.com</p>
+                    <input type="text" id="referencia-paypal" class="input-checkout" placeholder="Tu correo de PayPal o N° de Recibo">
+                </div>
+            </section>
+
+            <button id="btn-finalizar-compra" class="btn-block">CONFIRMAR Y PAGAR AHORA</button>
+        </div>
+
+        <div class="checkout-right">
+            <h2 style="color: #fff; margin-top: 0; margin-bottom: 20px; font-size: 1.2rem;">Resumen de tu Orden</h2>
+            <div id="resumen-carrito" class="resumen-items"></div>
+            
+            <div class="resumen-totales">
+                <div class="fila-total">
+                    <span>Total Divisas</span>
+                    <span id="checkout-total" style="color: #28a745;">$0.00</span>
+                </div>
+                <div class="fila-total" style="border-top: none; padding-top: 5px; margin-top: 0;">
+                    <span style="font-size: 0.9em; color: #aaa;">Total en Bs (Tasa Euro BCV)</span>
+                    <span id="checkout-total-bs" style="font-size: 0.95em; color: #fff;">Calculando...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="pantalla-factura" style="display: none; text-align: center; padding: 40px 20px;">
+        </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/checkout.js"></script> 
+</body>
+</html>
