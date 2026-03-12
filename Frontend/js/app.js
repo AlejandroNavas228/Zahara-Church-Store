@@ -1,32 +1,33 @@
 // 1. Configuración de la URL del Servidor
 // Mientras trabajas en tu PC, usamos localhost. 
-const API_URL = "https://zahara-api.onrender.com"; 
+// const API_URL = 'http://localhost:3000'; 
+const API_URL = 'https://zahara-api.onrender.com';
 
 let productos = []; 
 
-// Función para buscar los productos reales en el servidor NEON y Prisma
+// Función actualizada para entender la nueva Base de Datos (con galerías y stock)
 async function cargarProductos() {
     try {
         const respuesta = await fetch(`${API_URL}/api/productos`);
         const datosRaw = await respuesta.json(); 
 
-        // Mapeamos los datos de la base de datos para que el frontend los entienda
+        // 🌟 AQUÍ ESTÁ EL TRUCO: Actualizamos el mapeo 🌟
         productos = datosRaw.map(p => ({
             id: p.id,
             nombre: p.nombre,
-            precio: p.precio_usd, // Conectamos el precio_usd de Neon al precio del frontend
-            imagen: p.imagen,
-            stock: p.stock
+            precio: p.precio_usd,      // Lo dejamos como 'precio' para que el carrito no se rompa
+            precio_usd: p.precio_usd,  // Lo agregamos para que la galería pueda poner los decimales (.toFixed)
+            imagenes: p.imagenes || [],// Ahora lee la LISTA de fotos, no una sola
+            stock: p.stock || 0
         }));
         
         const contenedor = document.getElementById('contenedor-productos');
 
-        // Si no hay productos en la base de datos, mostramos el anuncio
         if (productos.length === 0) {
             if (contenedor) {
                 contenedor.innerHTML = `
-                    <div class="anuncio-vacio">
-                        <img src="assets/img/Anuncio.webp" alt="Próximamente nueva mercancía">
+                    <div class="anuncio-vacio" style="text-align: center; width: 100%;">
+                        <p style="color: white; font-size: 1.2rem;">Próximamente nueva mercancía 🔥</p>
                     </div>
                 `;
             }
@@ -37,10 +38,8 @@ async function cargarProductos() {
         
     } catch (error) {
         console.error("Error al cargar el catálogo desde Neon:", error);
-        mostrarNotificacion("No se pudo conectar con el servidor de productos.", "error");
     }
 }
-
 // Variables y referencias del DOM
 const contenedorProductos = document.getElementById('contenedor-productos');
 let carrito = JSON.parse(localStorage.getItem('carritoZahara')) || [];
@@ -92,48 +91,110 @@ function cerrarCarrito() {
 btnCerrarCarrito.addEventListener('click', cerrarCarrito);
 overlayCarrito.addEventListener('click', cerrarCarrito);
 
-// 2. Renderizar Productos
+// 2. DIBUJAR LOS PRODUCTOS EN PANTALLA
 function renderizarProductos() {
-    if (!contenedorProductos) return;
-    contenedorProductos.innerHTML = '';
+    const contenedor = document.getElementById('contenedor-productos');
+    if (!contenedor) return;
+    contenedor.innerHTML = '';
+
+    if (productos.length === 0) {
+        contenedor.innerHTML = `<p style="color: white; text-align: center; width: 100%;">Próximamente nueva mercancía 🔥</p>`;
+        return;
+    }
 
     productos.forEach(producto => {
-        const divProducto = document.createElement('div');
-        divProducto.classList.add('producto');
+        const div = document.createElement('div');
+        div.classList.add('producto');
 
-        divProducto.innerHTML = `
-            <img src="${producto.imagen || 'assets/img/placeholder.png'}" alt="${producto.nombre}">
+        // Tomamos la primera imagen de la lista como portada
+        const imagenPortada = (producto.imagenes && producto.imagenes.length > 0) ? producto.imagenes[0] : 'assets/img/placeholder.png';
+
+        div.innerHTML = `
+            <div style="position: relative;">
+                <img src="${imagenPortada}" alt="${producto.nombre}" onclick="abrirGaleria(${producto.id})" style="cursor: zoom-in;">
+                
+                <span style="position: absolute; top: 10px; right: 10px; background: ${producto.stock > 0 ? '#28a745' : '#ff3333'}; color: white; padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; font-weight: bold;">
+                    ${producto.stock > 0 ? `Stock: ${producto.stock}` : 'Agotado'}
+                </span>
+            </div>
             <h3>${producto.nombre}</h3>
-            <p class="precio">$${producto.precio.toFixed(2)}</p>
+            <p class="precio">$${producto.precio_usd.toFixed(2)}</p>
             
-            <select id="talla-${producto.id}" class="selector-talla">
-                <option value="S">Talla S</option>
-                <option value="M">Talla M</option>
-                <option value="L">Talla L</option>
-                <option value="XL">Talla XL</option>
-            </select>
-
-            <button class="btn-agregar" onclick="agregarAlCarrito(${producto.id})">Agregar al carrito</button>
+            <button class="btn-agregar" onclick="agregarAlCarrito(${producto.id})" ${producto.stock === 0 ? 'disabled style="background:#555; cursor:not-allowed;"' : ''}>
+                ${producto.stock > 0 ? 'Agregar al carrito' : 'Sin Stock'}
+            </button> 
         `;
-
-        contenedorProductos.appendChild(divProducto);
+        contenedor.appendChild(div);
     });
 }
 
-// 3. Agregar al carrito
+
+// ==========================================
+// 📸 LÓGICA DE LA GALERÍA DE FOTOS
+// ==========================================
+let fotosActuales = [];
+let indiceFotoActual = 0;
+
+function abrirGaleria(idProducto) {
+    const producto = productos.find(p => p.id === idProducto);
+    
+    // Si el producto no tiene fotos, no hacemos nada
+    if (!producto || !producto.imagenes || producto.imagenes.length === 0) return;
+
+    fotosActuales = producto.imagenes;
+    indiceFotoActual = 0;
+
+    actualizarVistaGaleria();
+    document.getElementById('modal-galeria').style.display = 'flex';
+}
+
+function cerrarGaleria() {
+    document.getElementById('modal-galeria').style.display = 'none';
+}
+
+function cambiarFoto(direccion) {
+    indiceFotoActual += direccion;
+
+    // Si llegamos al final, volvemos al inicio y viceversa (Carrusel infinito)
+    if (indiceFotoActual >= fotosActuales.length) indiceFotoActual = 0;
+    if (indiceFotoActual < 0) indiceFotoActual = fotosActuales.length - 1;
+
+    actualizarVistaGaleria();
+}
+
+function actualizarVistaGaleria() {
+    // 1. Cambiamos la foto principal
+    document.getElementById('imagen-principal-galeria').src = fotosActuales[indiceFotoActual];
+
+    // 2. Dibujamos los puntitos indicadores
+    const contenedorPuntos = document.getElementById('indicadores-galeria');
+    contenedorPuntos.innerHTML = '';
+    
+    fotosActuales.forEach((_, indice) => {
+        const punto = document.createElement('span');
+        punto.classList.add('punto');
+        if (indice === indiceFotoActual) punto.classList.add('activo');
+        // También pueden hacer clic en el puntito para ir a esa foto
+        punto.onclick = () => {
+            indiceFotoActual = indice;
+            actualizarVistaGaleria();
+        };
+        contenedorPuntos.appendChild(punto);
+    });
+}
+// 3. AGREGAR AL CARRITO (Simplificado, sin tallas)
 function agregarAlCarrito(id) {
     const productoElegido = productos.find(producto => producto.id === id);
-    const selectTalla = document.getElementById(`talla-${id}`);
-    const tallaElegida = selectTalla.value;
-    const idUnico = `${id}-${tallaElegida}`;
     
-    const existe = carrito.some(item => item.idUnico === idUnico);
+    // Ahora el idUnico es simplemente el id del producto
+    const existe = carrito.some(item => item.id === id);
     
     if (existe) {
-        mostrarNotificacion(`Ya tienes esta camisa en talla ${tallaElegida} en el carrito.`, 'error');
+        // Si ya existe, puedes sumarle 1 a la cantidad (opcional), 
+        // pero por ahora solo le avisamos que ya lo tiene:
+        mostrarNotificacion(`Ya tienes ${productoElegido.nombre} en el carrito.`, 'error');
     } else {
-        const productoConTalla = { ...productoElegido, idUnico: idUnico, talla: tallaElegida };
-        carrito.push(productoConTalla);
+        carrito.push(productoElegido);
         guardarCarritoEnLocalStorage();
         actualizarCarrito();
         
@@ -141,7 +202,6 @@ function agregarAlCarrito(id) {
         overlayCarrito.style.display = 'block';
     }
 }
-
 // 4. Actualizar la vista del Carrito
 function actualizarCarrito() {
     if (!contenedorItemsCarrito) return;
@@ -160,10 +220,10 @@ function actualizarCarrito() {
         div.classList.add('item-carrito');
         div.innerHTML = `
             <div class="item-info">
-                <h4>${item.nombre} (Talla: ${item.talla})</h4>
+                <h4>${item.nombre} )</h4>
                 <p class="item-precio">$${item.precio.toFixed(2)}</p>
             </div>
-            <button class="btn-eliminar" onclick="eliminarDelCarrito('${item.idUnico}')">X</button>
+            <button class="btn-eliminar" onclick="eliminarDelCarrito(${item.id})">X</button>
         `;
         contenedorItemsCarrito.appendChild(div);
         total += item.precio;
@@ -173,8 +233,12 @@ function actualizarCarrito() {
     document.querySelector('.btn-carrito').innerHTML = `<i class="fa-solid fa-bag-shopping"></i> (${carrito.length})`;
 }
 
-function eliminarDelCarrito(idUnico) {
-    carrito = carrito.filter(item => item.idUnico !== idUnico);
+// --- 5. ELIMINAR DEL CARRITO (Actualizado sin tallas) ---
+function eliminarDelCarrito(id) {
+    // Filtramos el carrito para guardar todos EXCEPTO el que tenga el ID que queremos borrar
+    carrito = carrito.filter(item => item.id !== id);
+    
+    // Guardamos la nueva lista en la memoria del navegador y redibujamos el panel
     guardarCarritoEnLocalStorage();
     actualizarCarrito();
 }

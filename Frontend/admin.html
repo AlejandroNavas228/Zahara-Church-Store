@@ -28,6 +28,7 @@
     </header>
 
     <main class="catalogo" style="padding: 40px 20px;">
+        
         <h2 class="titulo-seccion">Agregar Nuevo Producto</h2>
         
         <form id="form-admin" style="max-width: 500px; margin: 0 auto; background: #111; padding: 30px; border-radius: 8px; border: 1px solid #333;">
@@ -37,18 +38,30 @@
                 <input type="text" id="nombre-producto" required style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 4px;">
             </div>
 
+            <div style="margin-bottom: 20px; display: flex; gap: 15px;">
+                <div style="flex: 1;">
+                    <label for="precio-producto" style="display: block; margin-bottom: 8px; font-weight: bold;">Precio ($):</label>
+                    <input type="number" id="precio-producto" step="0.01" required style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 4px;">
+                </div>
+                <div style="flex: 1;">
+                    <label for="stock-producto" style="display: block; margin-bottom: 8px; font-weight: bold;">Cantidad (Stock):</label>
+                    <input type="number" id="stock-producto" min="1" required style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 4px;">
+                </div>
+            </div>
+
             <div style="margin-bottom: 20px;">
-                <label for="precio-producto" style="display: block; margin-bottom: 8px; font-weight: bold;">Precio ($):</label>
-                <input type="number" id="precio-producto" step="0.01" required style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 4px;">
+                <label for="imagen-producto" style="display: block; margin-bottom: 8px; font-weight: bold;">Sube las fotos (Puedes seleccionar varias):</label>
+                <input type="file" id="imagen-producto" accept="image/*" multiple required style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 4px;">
             </div>
 
-           <div style="margin-bottom: 20px;">
-                <label for="imagen-producto" style="display: block; margin-bottom: 8px; font-weight: bold;">Sube la foto de la camisa:</label>
-                <input type="file" id="imagen-producto" accept="image/*" required style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 4px;">
-            </div>
-
-            <button type="submit" class="btn-pagar" style="width: 100%; margin-top: 10px;">Guardar Producto</button>
+            <button type="submit" class="btn-pagar" style="width: 100%; margin-top: 10px; background-color: #fff; color: #000; font-weight: bold; border: none; padding: 12px; border-radius: 4px; cursor: pointer;">Guardar Producto</button>
         </form>
+
+        <h2 class="titulo-seccion" style="margin-top: 60px; color: #28a745;">📦 Bandeja de Pedidos</h2>
+        <p style="text-align: center; color: #aaa; max-width: 600px; margin: 0 auto 20px;">Aquí aparecerán los pagos reportados por los clientes. Al aprobarlos, el inventario se descontará automáticamente.</p>
+        
+        <div id="contenedor-ordenes" style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
+            </div>
 
         <h2 class="titulo-seccion" style="margin-top: 60px;">Inventario Actual</h2>
         
@@ -59,7 +72,7 @@
                         <th style="padding: 12px;">Foto</th>
                         <th style="padding: 12px;">Nombre</th>
                         <th style="padding: 12px;">Precio</th>
-                        <th style="padding: 12px;">Acción</th>
+                        <th style="padding: 12px; color: #28a745;">Stock</th> <th style="padding: 12px;">Acción</th>
                     </tr>
                 </thead>
                 <tbody id="tabla-productos">
@@ -69,6 +82,7 @@
 
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/admin.js"></script>
 </body>
 </html>

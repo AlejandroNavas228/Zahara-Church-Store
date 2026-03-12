@@ -1,4 +1,5 @@
-const API_URL = "https://zahara-api.onrender.com"; 
+// const API_URL = 'http://localhost:3000'; 
+const API_URL = 'https://zahara-api.onrender.com';
 let carrito = JSON.parse(localStorage.getItem('carritoZahara')) || [];
 
 // 🚨 REGLA DE SEGURIDAD
@@ -78,7 +79,6 @@ function cargarResumenCompra() {
             <img src="${item.imagen}" alt="${item.nombre}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #444;">
             <div style="flex: 1; margin-left: 15px;">
                 <p style="margin: 0; font-weight: bold; color: #fff;">${item.nombre}</p>
-                <p style="margin: 5px 0 0 0; font-size: 0.85rem; color: #aaa;">Talla: ${item.talla}</p>
             </div>
             <div style="font-weight: bold; color: #28a745;">$${item.precio.toFixed(2)}</div>
         `;
@@ -161,13 +161,19 @@ if (btnFinalizar) {
         btnFinalizar.disabled = true;
 
         try {
-            // Guardar en la base de datos
-            await fetch(`${API_URL}/api/pagos`, {
+           // Guardar en la base de datos con todo el detalle de la orden
+            await fetch(`${API_URL}/api/ordenes`, { // OJO: Cambiamos /pagos por /ordenes
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ banco: bancoInfo, referencia: referenciaInfo, monto: montoInfo })
+                body: JSON.stringify({ 
+                    clienteNombre: nombre,
+                    clienteTelefono: telefono,
+                    metodoPago: bancoInfo, 
+                    referencia: referenciaInfo, 
+                    totalPagado: montoInfo,
+                    detalleCarrito: carrito // ¡Aquí viajan las camisas compradas!
+                })
             });
-
             // 🌟 MAGIA DE LA FACTURA 🌟
             // 1. Ocultar todo el checkout
             document.querySelector('.checkout-container').style.display = 'none';
@@ -192,7 +198,7 @@ if (btnFinalizar) {
             `;
             
             carrito.forEach(item => {
-                htmlFactura += `<li><strong>${item.nombre}</strong> (Talla: ${item.talla}) - $${item.precio.toFixed(2)}</li>`;
+                htmlFactura += `<li><strong>${item.nombre}</strong> - $${item.precio.toFixed(2)}</li>`;
             });
 
             htmlFactura += `

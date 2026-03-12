@@ -106,6 +106,21 @@
 
     <div id="toast-container" class="toast-container"></div>
 
+    <div id="modal-galeria" class="modal-overlay" style="display: none;">
+        <div class="modal-contenido">
+            <span class="cerrar-modal" onclick="cerrarGaleria()">&times;</span>
+            
+            <div class="carrusel-contenedor">
+                <button class="btn-flecha izq" onclick="cambiarFoto(-1)">&#10094;</button>
+                <img id="imagen-principal-galeria" src="" alt="Vista previa">
+                <button class="btn-flecha der" onclick="cambiarFoto(1)">&#10095;</button>
+            </div>
+            
+            <div id="indicadores-galeria" class="indicadores">
+                </div>
+        </div>
+    </div>
+
     <script src="js/app.js"></script>
     
     </body>
