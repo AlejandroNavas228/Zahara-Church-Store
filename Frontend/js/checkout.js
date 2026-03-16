@@ -138,7 +138,7 @@ if (btnFinalizar) {
 
             // 4. ¡EL VIAJE A LUMINA!
             // Reemplaza esto con el ID real de Zahara que está en tu panel de Lumina
-            const comercioId = "PEGA_AQUI_EL_ID_DE_COMERCIO_DE_ZAHARA"; 
+            const comercioId = "081ceb77-9eee-41fd-a6ee-dfcf2e6928aa"; 
             
             // Construimos la URL con el monto exacto y el ID de la orden
             const urlLumina = `https://pay-saas-frontend.vercel.app/checkout?comercioId=${comercioId}&monto=${totalDivisas}&referencia=${idDeLaOrden}`;
