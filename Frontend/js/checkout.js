@@ -90,151 +90,72 @@ function cargarResumenCompra() {
     actualizarMontoBolivares(); 
 }
 
-// --- 5. ENVIAR PAGO Y GENERAR FACTURA ---
+// --- 5. ENVIAR A LUMINA (NUEVO FLUJO AUTOMATIZADO) ---
 if (btnFinalizar) {
     btnFinalizar.addEventListener('click', async () => {
+        // 1. Solo pedimos los datos de contacto básicos
         const nombre = document.getElementById('cliente-nombre').value.trim();
         const telefono = document.getElementById('cliente-telefono').value.trim();
         
-        const metodoRadio = document.querySelector('input[name="metodo_pago"]:checked');
-        if (!metodoRadio) return alert("Selecciona un método de pago.");
-        const metodoSeleccionado = metodoRadio.value;
-        
-        let bancoInfo = "";
-        let referenciaInfo = "";
-        let montoInfo = totalDivisas; 
-
-        if (metodoSeleccionado === 'pagomovil') {
-            bancoInfo = document.getElementById('banco-origen').value;
-            referenciaInfo = document.getElementById('referencia-pagomovil').value.trim();
-            montoInfo = parseFloat(document.getElementById('monto-pagomovil').value);
-            
-            if (!bancoInfo || !referenciaInfo || isNaN(montoInfo)) {
-                return Swal.fire({
-                    icon: 'warning',
-                    title: 'Faltan datos',
-                    text: 'Por favor completa tu Banco y N° de Referencia del Pago Móvil.',
-                    confirmButtonColor: '#28a745',
-                    background: '#1a1a1a',
-                    color: '#fff'
-                });
-            }
-        } else if (metodoSeleccionado === 'binance') {
-            bancoInfo = "Binance USDT";
-            referenciaInfo = document.getElementById('referencia-binance').value.trim();
-            if (!referenciaInfo) {
-                return Swal.fire({
-                    icon: 'warning',
-                    title: 'Faltan datos',
-                    text: 'Ingresa tu usuario o referencia de Binance.',
-                    confirmButtonColor: '#28a745',
-                    background: '#1a1a1a',
-                    color: '#fff'
-                });
-            }
-        } else if (metodoSeleccionado === 'paypal') {
-            bancoInfo = "PayPal USD";
-            referenciaInfo = document.getElementById('referencia-paypal').value.trim();
-            if (!referenciaInfo) {
-                return Swal.fire({
-                    icon: 'warning',
-                    title: 'Faltan datos',
-                    text: 'Ingresa tu correo o referencia de PayPal.',
-                    confirmButtonColor: '#28a745',
-                    background: '#1a1a1a',
-                    color: '#fff'
-                });
-            }
-        }
-
         if (!nombre || !telefono) {
             return Swal.fire({
                 icon: 'error',
-                title: 'Datos de contacto incompletos',
-                text: 'Por favor ingresa tu nombre y teléfono para poder contactarte sobre tu pedido.',
+                title: 'Datos incompletos',
+                text: 'Por favor ingresa tu nombre y teléfono para procesar el envío.',
                 confirmButtonColor: '#28a745',
                 background: '#1a1a1a',
                 color: '#fff'
             });
         }
-        btnFinalizar.innerText = "PROCESANDO... ⏳";
+
+        btnFinalizar.innerText = "CONECTANDO CON LA PASARELA... 🔒";
         btnFinalizar.disabled = true;
 
         try {
-           // Guardar en la base de datos con todo el detalle de la orden
-            await fetch(`${API_URL}/api/ordenes`, { // OJO: Cambiamos /pagos por /ordenes
+            // 2. Registramos la orden en el Backend de Zahara como "Pendiente"
+            const respuesta = await fetch(`${API_URL}/api/ordenes`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
                     clienteNombre: nombre,
                     clienteTelefono: telefono,
-                    metodoPago: bancoInfo, 
-                    referencia: referenciaInfo, 
-                    totalPagado: montoInfo,
-                    detalleCarrito: carrito // ¡Aquí viajan las camisas compradas!
+                    metodoPago: "Lumina Gateway", // Esto se actualizará luego
+                    referencia: "Pendiente de pago", 
+                    totalPagado: totalDivisas,
+                    detalleCarrito: carrito 
                 })
             });
-            // 🌟 MAGIA DE LA FACTURA 🌟
-            // 1. Ocultar todo el checkout
-            document.querySelector('.checkout-container').style.display = 'none';
-            document.querySelector('.checkout-header').style.display = 'none';
-            
-            // 2. Construir la factura en HTML
-            const numeroOrden = Math.floor(Math.random() * 100000);
-            let htmlFactura = `
-                <div style="max-width: 600px; margin: 0 auto; background: #1a1a1a; padding: 30px; border-radius: 10px; border: 1px solid #333; text-align: left;">
-                    <div style="text-align: center; margin-bottom: 20px;">
-                        <i class="fa-solid fa-circle-check" style="color: #28a745; font-size: 3rem; margin-bottom: 10px;"></i>
-                        <h2 style="color: #fff; margin: 0;">¡Orden Registrada!</h2>
-                        <p style="color: #aaa; margin-top: 5px;">Orden #ZH-${numeroOrden}</p>
-                    </div>
-                    
-                    <hr style="border-color: #333; margin: 20px 0;">
-                    
-                    <h3 style="color: #fff;">Hola, ${nombre}</h3>
-                    <p style="color: #ddd;">Tu pedido ha sido guardado en nuestro sistema. Aquí tienes el resumen de tu compra:</p>
-                    
-                    <ul style="color: #fff; line-height: 1.8; padding-left: 20px;">
-            `;
-            
-            carrito.forEach(item => {
-                htmlFactura += `<li><strong>${item.nombre}</strong> - $${item.precio.toFixed(2)}</li>`;
-            });
 
-            htmlFactura += `
-                    </ul>
-                    <hr style="border-color: #333; margin: 20px 0;">
-                    
-                    <div style="background: #111; padding: 15px; border-radius: 5px; border: 1px solid #444;">
-                        <p style="color: #fff; margin: 5px 0;"><strong>Total Pagado:</strong> <span style="color:#28a745;">$${totalDivisas.toFixed(2)}</span></p>
-                        <p style="color: #fff; margin: 5px 0;"><strong>Método:</strong> ${bancoInfo}</p>
-                        <p style="color: #fff; margin: 5px 0;"><strong>Referencia:</strong> ${referenciaInfo}</p>
-                    </div>
-                    
-                    <div style="background: #1e3021; padding: 15px; border-radius: 5px; border-left: 4px solid #28a745; margin-top: 25px;">
-                        <p style="color: #d4edda; margin: 0; font-size: 0.95rem;">
-                            ⚠️ <strong>Paso Final:</strong> Para procesar tu envío de inmediato, por favor envíanos el comprobante (Capture) de tu pago por WhatsApp.
-                        </p>
-                    </div>
-
-                    <button onclick="enviarComprobanteWA('${nombre}', '${bancoInfo}', '${referenciaInfo}')" style="width: 100%; padding: 15px; background-color: #25D366; color: white; font-weight: bold; border: none; border-radius: 5px; font-size: 16px; margin-top: 25px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; transition: 0.3s;">
-                        <i class="fa-brands fa-whatsapp" style="font-size: 1.3rem;"></i> ENVIAR CAPTURE AL WHATSAPP
-                    </button>
-                </div>
-            `;
-
-            // 3. Mostrar la factura
-            const pantallaFactura = document.getElementById('pantalla-factura');
-            pantallaFactura.innerHTML = htmlFactura;
-            pantallaFactura.style.display = 'block';
+            // Obtenemos la orden que tu backend acaba de guardar
+            const ordenCreada = await respuesta.json();
             
-            // 4. Limpiar el carrito
+            // Extraemos el ID real que Prisma le asignó a esta orden
+            // (Asegúrate de que tu API devuelve el ID. Si lo devuelve como 'id', usamos ese)
+            const idDeLaOrden = ordenCreada.id; 
+
+            // 3. Limpiamos el carrito local porque la orden ya está registrada en tu base de datos
             localStorage.setItem('carritoZahara', JSON.stringify([]));
+
+            // 4. ¡EL VIAJE A LUMINA!
+            // Reemplaza esto con el ID real de Zahara que está en tu panel de Lumina
+            const comercioId = "PEGA_AQUI_EL_ID_DE_COMERCIO_DE_ZAHARA"; 
+            
+            // Construimos la URL con el monto exacto y el ID de la orden
+            const urlLumina = `https://pay-saas-frontend.vercel.app/checkout?comercioId=${comercioId}&monto=${totalDivisas}&referencia=${idDeLaOrden}`;
+
+            // 5. Redirigimos al cliente a pagar de forma segura
+            window.location.href = urlLumina;
 
         } catch (error) {
             console.error(error);
-           Swal.fire({ icon: 'error', title: 'Error', text: 'Error de conexión...' });
-            btnFinalizar.innerText = "CONFIRMAR Y PAGAR AHORA";
+            Swal.fire({ 
+                icon: 'error', 
+                title: 'Error de conexión', 
+                text: 'No pudimos conectar con el servidor de pagos. Intenta de nuevo.',
+                background: '#1a1a1a',
+                color: '#fff'
+            });
+            btnFinalizar.innerText = "IR A PAGAR";
             btnFinalizar.disabled = false;
         }
     });
