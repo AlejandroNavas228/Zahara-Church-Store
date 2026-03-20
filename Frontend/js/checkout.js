@@ -141,7 +141,8 @@ if (btnFinalizar) {
             const comercioId = "081ceb77-9eee-41fd-a6ee-dfcf2e6928aa"; 
             
             // Construimos la URL con el monto exacto y el ID de la orden
-            const urlLumina = `https://pay-saas-frontend.vercel.app/checkout?comercioId=${comercioId}&monto=${totalDivisas}&referencia=${idDeLaOrden}`;
+            // Construimos la URL con tu nuevo dominio oficial
+const urlLumina = `https://luminapay.xyz/checkout?comercioId=${comercioId}&monto=${totalDivisas}&referencia=${idDeLaOrden}`;
 
             // 5. Redirigimos al cliente a pagar de forma segura
             window.location.href = urlLumina;
