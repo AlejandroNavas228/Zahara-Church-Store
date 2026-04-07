@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Control | Zahara</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/catalogo.css">
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <script>
         // Si no hay un "permiso" guardado en el navegador, lo devolvemos al login
@@ -31,30 +34,37 @@
         
         <h2 class="titulo-seccion">Agregar Nuevo Producto</h2>
         
-        <form id="form-admin" style="max-width: 500px; margin: 0 auto; background: #111; padding: 30px; border-radius: 8px; border: 1px solid #333;">
+         <form id="form-admin" class="admin-formulario">
+            <h3 style="text-align: center; margin-bottom: 25px; color: #fff; font-family: 'Anton', sans-serif; letter-spacing: 1px;">Subir Nuevo Producto</h3>
             
-            <div style="margin-bottom: 20px;">
-                <label for="nombre-producto" style="display: block; margin-bottom: 8px; font-weight: bold;">Nombre de la Camisa:</label>
-                <input type="text" id="nombre-producto" required style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 4px;">
+            <div class="grupo-input">
+                <label for="nombre-producto">Nombre del Producto</label>
+                <input type="text" id="nombre-producto" placeholder="Ej: Camiseta Oversize Negra" required>
             </div>
 
-            <div style="margin-bottom: 20px; display: flex; gap: 15px;">
-                <div style="flex: 1;">
-                    <label for="precio-producto" style="display: block; margin-bottom: 8px; font-weight: bold;">Precio ($):</label>
-                    <input type="number" id="precio-producto" step="0.01" required style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 4px;">
-                </div>
-                <div style="flex: 1;">
-                    <label for="stock-producto" style="display: block; margin-bottom: 8px; font-weight: bold;">Cantidad (Stock):</label>
-                    <input type="number" id="stock-producto" min="1" required style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 4px;">
-                </div>
+            <div class="grupo-input">
+                <label for="precio-producto">Precio (USD)</label>
+                <input type="number" id="precio-producto" step="0.01" placeholder="Ej: 25.00" required>
             </div>
 
-            <div style="margin-bottom: 20px;">
-                <label for="imagen-producto" style="display: block; margin-bottom: 8px; font-weight: bold;">Sube las fotos (Puedes seleccionar varias):</label>
-                <input type="file" id="imagen-producto" accept="image/*" multiple required style="width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 4px;">
+            <div class="grupo-input">
+                <label for="stock-producto">Cantidad en Inventario (Stock)</label>
+                <input type="number" id="stock-producto" placeholder="Ej: 15" required>
             </div>
 
-            <button type="submit" class="btn-pagar" style="width: 100%; margin-top: 10px; background-color: #fff; color: #000; font-weight: bold; border: none; padding: 12px; border-radius: 4px; cursor: pointer;">Guardar Producto</button>
+            <div class="grupo-input">
+                <label for="descripcion-producto">Descripción del Producto</label>
+                <textarea id="descripcion-producto" rows="4" placeholder="Ej: Camiseta 100% algodón, diseño oversized con estampado en la espalda..." required></textarea>
+            </div>
+
+            <div class="grupo-input">
+                <label for="imagen-producto">Foto del Producto</label>
+                <input type="file" id="imagen-producto" accept="image/*" required>
+            </div>
+
+            <button type="submit" class="btn-guardar">
+                <i class="fa-solid fa-cloud-arrow-up"></i> Guardar en Tienda
+            </button>
         </form>
 
         <h2 class="titulo-seccion" style="margin-top: 60px; color: #28a745;">📦 Bandeja de Pedidos</h2>

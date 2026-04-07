@@ -1,9 +1,9 @@
-// 1. Configuración de la URL del Servidor
-// Mientras trabajas en tu PC, usamos localhost. 
 // const API_URL = 'http://localhost:3000'; 
 const API_URL = 'https://zahara-api.onrender.com';
 
 let productos = []; 
+
+document.getElementById('contenedor-productos').innerHTML = '<div style="grid-column: 1 / -1; width: 100%; text-align: center; padding: 40px 0;"><h3 style="color: #ffffff; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 1px;">Cargando colección exclusiva... ⏳</h3></div>';
 
 // Función actualizada para entender la nueva Base de Datos (con galerías y stock)
 async function cargarProductos() {
@@ -11,29 +11,34 @@ async function cargarProductos() {
         const respuesta = await fetch(`${API_URL}/api/productos`);
         const datosRaw = await respuesta.json(); 
 
-        // 🌟 AQUÍ ESTÁ EL TRUCO: Actualizamos el mapeo 🌟
+        // 🌟 MAPEO CORREGIDO CON LA BASE DE DATOS ACTUAL 🌟
         productos = datosRaw.map(p => ({
             id: p.id,
             nombre: p.nombre,
-            precio: p.precio_usd,      // Lo dejamos como 'precio' para que el carrito no se rompa
-            precio_usd: p.precio_usd,  // Lo agregamos para que la galería pueda poner los decimales (.toFixed)
-            imagenes: p.imagenes || [],// Ahora lee la LISTA de fotos, no una sola
-            stock: p.stock || 0
+            precio: p.precio,   
+            imagen: p.imagen,   
+            stock: 10           
         }));
         
         const contenedor = document.getElementById('contenedor-productos');
 
         if (productos.length === 0) {
-            if (contenedor) {
-                contenedor.innerHTML = `
-                    <div class="anuncio-vacio" style="text-align: center; width: 100%;">
-                        <p style="color: white; font-size: 1.2rem;">Próximamente nueva mercancía 🔥</p>
-                    </div>
-                `;
-            }
-            return; 
+        if (contenedor) {
+            // ¡EL TRUCO DEFINITIVO! Apagamos la cuadrícula/flexbox para que ocupe toda la pantalla libremente
+            contenedor.style.display = 'block'; 
+            
+            contenedor.innerHTML = `
+                <div style="width: 100%; max-width: 800px; margin: 0 auto; padding: 20px; text-align: center; box-sizing: border-box;">
+                    
+                    <img src="assets/img/Anuncio.webp" alt="Próximamente nueva colección" style="width: 100%; height: auto; border-radius: 12px; border: 1px solid #333333; margin-bottom: 25px; box-shadow: 0 10px 20px rgba(255,255,255,0.05);">
+                    
+                    <p style="color: #ffffff; font-size: 1.5rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin: 0;">Próximamente nueva mercancía 🔥</p>
+                    <p style="color: #888888; font-size: 1rem; margin-top: 10px;">¡Mantente atento a nuestras redes sociales!</p>
+                </div>
+            `;
         }
-
+        return; 
+    }
         renderizarProductos(); 
         
     } catch (error) {
@@ -92,41 +97,98 @@ btnCerrarCarrito.addEventListener('click', cerrarCarrito);
 overlayCarrito.addEventListener('click', cerrarCarrito);
 
 // 2. DIBUJAR LOS PRODUCTOS EN PANTALLA
+// 2. DIBUJAR LOS PRODUCTOS EN PANTALLA
 function renderizarProductos() {
     const contenedor = document.getElementById('contenedor-productos');
     if (!contenedor) return;
     contenedor.innerHTML = '';
 
     if (productos.length === 0) {
-        contenedor.innerHTML = `<p style="color: white; text-align: center; width: 100%;">Próximamente nueva mercancía 🔥</p>`;
-        return;
+        // Apagamos flexbox/grid para que el banner se centre libremente
+        contenedor.style.display = 'block'; 
+        
+        contenedor.innerHTML = `
+            <div style="width: 100%; max-width: 800px; margin: 0 auto; padding: 20px; text-align: center; box-sizing: border-box;">
+                <img src="assets/img/Anuncio.webp" alt="Próximamente nueva colección" style="width: 100%; height: auto; border-radius: 12px; border: 1px solid #333333; margin-bottom: 25px; box-shadow: 0 10px 20px rgba(255,255,255,0.05);">
+                <p style="color: #ffffff; font-size: 1.5rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin: 0;">Próximamente nueva mercancía 🔥</p>
+                <p style="color: #888888; font-size: 1rem; margin-top: 10px;">¡Mantente atento a nuestras redes sociales!</p>
+            </div>
+        `;
+        return; 
     }
 
+    // Volvemos a encender el Grid por si hay productos
+    contenedor.style.display = 'grid';
+
+    // AQUÍ INICIA EL CICLO CORRECTAMENTE
     productos.forEach(producto => {
         const div = document.createElement('div');
         div.classList.add('producto');
 
-        // Tomamos la primera imagen de la lista como portada
-        const imagenPortada = (producto.imagenes && producto.imagenes.length > 0) ? producto.imagenes[0] : 'assets/img/placeholder.png';
+        const imagenPortada = producto.imagen || 'assets/img/placeholder.png';
 
         div.innerHTML = `
             <div style="position: relative;">
-                <img src="${imagenPortada}" alt="${producto.nombre}" onclick="abrirGaleria(${producto.id})" style="cursor: zoom-in;">
-                
-                <span style="position: absolute; top: 10px; right: 10px; background: ${producto.stock > 0 ? '#28a745' : '#ff3333'}; color: white; padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; font-weight: bold;">
-                    ${producto.stock > 0 ? `Stock: ${producto.stock}` : 'Agotado'}
-                </span>
+                <a href="detalle.html?id=${producto.id}" target="_blank">
+                    <img src="${imagenPortada}" alt="${producto.nombre}" title="Ver detalles">
+                </a>
             </div>
-            <h3>${producto.nombre}</h3>
-            <p class="precio">$${producto.precio_usd.toFixed(2)}</p>
             
-            <button class="btn-agregar" onclick="agregarAlCarrito(${producto.id})" ${producto.stock === 0 ? 'disabled style="background:#555; cursor:not-allowed;"' : ''}>
-                ${producto.stock > 0 ? 'Agregar al carrito' : 'Sin Stock'}
-            </button> 
+            <div class="producto-info-fila">
+                <div class="producto-textos">
+                    <h3>${producto.nombre}</h3>
+                    <p class="precio">$${producto.precio.toFixed(2)}</p>
+                </div>
+                
+                <button class="btn-agregar-cuadrado" onclick="agregarAlCarrito(${producto.id})" title="Agregar al carrito">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </div>
         `;
         contenedor.appendChild(div);
     });
 }
+
+   productos.forEach(producto => {
+        const div = document.createElement('div');
+        
+        // Tarjeta oscura con borde sutil. 
+        div.style.cssText = "background: #0a0a0a; border: 1px solid #333333; border-radius: 12px; overflow: hidden; transition: all 0.3s ease;";
+
+        const imagenPortada = producto.imagen || 'assets/img/placeholder.png';
+        const precioReal = producto.precio || 0;
+
+        div.innerHTML = `
+            <a href="detalle.html?id=${producto.id}" target="_blank" style="text-decoration: none; color: inherit; display: block; position: relative;">
+                <img src="${imagenPortada}" alt="${producto.nombre}" loading="lazy" style="width: 100%; aspect-ratio: 1/1; object-fit: cover;">
+                
+                <div style="padding: 15px; text-align: center;">
+                    <h3 style="margin: 0 0 8px 0; font-size: 1rem; color: #ffffff;">${producto.nombre}</h3>
+                    <p class="precio" style="margin: 0; font-weight: bold; font-size: 1.2rem; color: #ffffff;">$${precioReal.toFixed(2)}</p>
+                </div>
+            </a>
+            
+            <div style="padding: 0 15px 15px 15px;">
+                <button onclick="agregarAlCarrito(${producto.id})" style="width: 100%; padding: 10px; background: #ffffff; color: #000000; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background 0.2s;">
+                    Agregar al carrito
+                </button>
+            </div>
+        `;
+        
+        // Efecto hover: Al pasar el mouse, la tarjeta sube un poco y el borde se ilumina en blanco
+        div.onmouseover = () => {
+            div.style.transform = "translateY(-5px)";
+            div.style.borderColor = "#ffffff";
+            div.style.boxShadow = "0 5px 15px rgba(255,255,255,0.1)";
+        };
+        div.onmouseout = () => {
+            div.style.transform = "translateY(0)";
+            div.style.borderColor = "#333333";
+            div.style.boxShadow = "none";
+        };
+        
+        contenedor.appendChild(div);
+    });
 
 
 // ==========================================

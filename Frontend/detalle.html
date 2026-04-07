@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Producto | Zahara Church Store</title>
+    
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/detalle.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="detalle-container" id="info-producto">
+        <h2 style="text-align: center; color: white;">Cargando producto...</h2>
+    </div>
+
+    <script>
+        // Use localhost for local testing
+        // const API_URL = 'http://localhost:3000'; 
+        const API_URL = 'https://zahara-api.onrender.com'; // Cuando subas a producción
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const idProducto = urlParams.get('id');
+
+        const WHATSAPP_NUMBER = '584143894452'; 
+
+       async function cargarDetalle() {
+            try {
+                const respuesta = await fetch(`${API_URL}/api/productos`);
+                const productos = await respuesta.json();
+                
+                const p = productos.find(prod => prod.id == idProducto);
+
+                // 🌟 AHORA BUSCA "info-producto" EN LUGAR DEL ANTERIOR
+                if (!p) {
+                    document.getElementById('info-producto').innerHTML = "<h2 style='text-align:center;'>Producto no encontrado 😕</h2>";
+                    return;
+                }
+
+                const descripcion = p.descripcion || 'Sin descripción detallada por el momento.';
+                const stock = p.stock || 0;
+                const tieneStock = stock > 0;
+
+                // 🌟 AQUI TAMBIÉN BUSCA "info-producto"
+                document.getElementById('info-producto').innerHTML = `
+                    <div class="grid-detalle">
+                        
+                        <div class="col-imagen">
+                            <img src="${p.imagen}" alt="${p.nombre}">
+                        </div>
+                        
+                        <div class="col-info">
+                            <h1>${p.nombre}</h1>
+                            <p class="precio">$${p.precio.toFixed(2)}</p>
+                            
+                            <div class="etiqueta-stock ${tieneStock ? 'ok' : 'bad'}">
+                                ${tieneStock ? `En inventario: ${stock} unidades` : 'Producto Agotado'}
+                            </div>
+                            
+                            <div class="caja-descripcion">
+                                <h3>Detalles de la prenda</h3>
+                                <p>${descripcion}</p>
+                            </div>
+                            
+                            <div class="grupo-botones">
+                                <button class="btn-full btn-blanco" ${!tieneStock ? 'disabled style="background:#555; cursor:not-allowed;"' : ''} 
+                                    onclick="comprarDirecto(${p.id}, '${p.nombre}', ${p.precio}, '${p.imagen}')">
+                                    ${tieneStock ? 'Añadir y Pagar Seguro 🔒' : 'Agotado'}
+                                </button>
+                                
+                                <a href="https://wa.me/${WHATSAPP_NUMBER}?text=Hola Zahara! Me interesa la prenda: ${encodeURIComponent(p.nombre)}" class="btn-full btn-wa" target="_blank">
+                                    <i class="fa-brands fa-whatsapp"></i> Consultar por WhatsApp
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                `;
+            } catch (error) {
+                console.error("Error:", error);
+                // 🌟 Y AQUÍ TAMBIÉN
+                document.getElementById('info-producto').innerHTML = `<h2 style='text-align:center;'>Error al cargar: ${error.message}</h2>`;
+            }
+        }
+
+        function comprarDirecto(id, nombre, precio, imagen) {
+            let carrito = JSON.parse(localStorage.getItem('carritoZahara')) || [];
+            const existe = carrito.some(item => item.id === id);
+            
+            if (!existe) {
+                carrito.push({ id, nombre, precio, imagen });
+                localStorage.setItem('carritoZahara', JSON.stringify(carrito));
+            }
+            window.location.href = 'checkout.html';
+        }
+
+        cargarDetalle();
+    </script>
+</body>
+</html>

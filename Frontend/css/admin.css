@@ -1,0 +1,74 @@
+/* --- ESTILOS DEL PANEL DE ADMINISTRACIÓN --- */
+
+.admin-formulario {
+    background-color: #111111;
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #333333;
+    max-width: 500px;
+    margin: 0 auto 40px; /* Centrado en la pantalla */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.grupo-input {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.grupo-input label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #cccccc;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.grupo-input input,
+.grupo-input textarea {
+    background-color: #000000;
+    border: 1px solid #444444;
+    color: #ffffff;
+    padding: 15px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    transition: border-color 0.3s;
+}
+
+.grupo-input input:focus,
+.grupo-input textarea:focus {
+    border-color: #ffffff; /* Brilla en blanco al seleccionarlo */
+    outline: none;
+}
+
+/* Estilo especial para el input de archivo (foto) */
+.grupo-input input[type="file"] {
+    padding: 10px;
+    background-color: #1a1a1a;
+    color: #888888;
+    cursor: pointer;
+}
+
+.btn-guardar {
+    width: 100%;
+    padding: 16px;
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 0.2s;
+    margin-top: 10px;
+}
+
+.btn-guardar:hover {
+    background-color: #cccccc;
+    transform: translateY(-2px);
+}

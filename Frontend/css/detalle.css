@@ -1,0 +1,135 @@
+/* --- ESTILOS PARA DETALLE.HTML (Diseño Grid 2 Columnas) --- */
+
+body {
+    background-color: #000000;
+    color: #ffffff;
+    padding: 40px 20px;
+}
+
+/* Contenedor Principal: Divide la pantalla en 2 mitades exactas */
+.grid-detalle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    max-width: 1100px;
+    margin: 20px auto;
+    background: #0a0a0a;
+    padding: 40px;
+    border-radius: 12px;
+    border: 1px solid #222222;
+    align-items: start;
+}
+
+/* Lado Izquierdo: Imagen */
+.col-imagen {
+    width: 100%;
+}
+
+.col-imagen img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    background: #111;
+}
+
+/* Lado Derecho: Información */
+.col-info {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Permite empujar los botones hacia abajo */
+}
+
+.col-info h1 {
+    font-family: 'Anton', sans-serif;
+    font-size: 3rem;
+    margin-bottom: 10px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.col-info .precio {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #ffffff;
+}
+
+/* Etiqueta de Inventario */
+.etiqueta-stock {
+    margin-bottom: 25px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.etiqueta-stock::before { content: "•"; font-size: 1.5rem; }
+.ok { color: #28a745; } /* Verde si hay stock */
+.bad { color: #ff4444; } /* Rojo si está agotado */
+
+/* Caja de Descripción */
+.caja-descripcion {
+    background: #111111;
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid #333333;
+    margin-bottom: 30px;
+}
+.caja-descripcion h3 {
+    font-size: 1.1rem;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+    color: #fff;
+    text-transform: uppercase;
+}
+.caja-descripcion p {
+    color: #aaaaaa;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* Botones alineados abajo */
+.grupo-botones {
+    margin-top: auto; /* Magia para enviar los botones al fondo */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.btn-full {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s, background 0.2s;
+}
+.btn-full:hover { transform: scale(1.02); }
+
+.btn-blanco { background: #ffffff; color: #000000; }
+.btn-blanco:hover { background: #cccccc; }
+
+.btn-wa { background: #25D366; color: #ffffff; text-decoration: none; }
+.btn-wa:hover { background: #1ebe57; }
+
+/* --- RESPONSIVE (Adaptación para celulares) --- */
+@media (max-width: 850px) {
+    .grid-detalle {
+        grid-template-columns: 1fr; /* Pasa a 1 sola columna hacia abajo */
+        gap: 30px;
+        padding: 20px;
+    }
+    .col-info h1 { font-size: 2.2rem; }
+}
