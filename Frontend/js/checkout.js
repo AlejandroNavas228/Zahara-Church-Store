@@ -10,9 +10,9 @@ if (carrito.length === 0) {
 const contenedorResumen = document.getElementById('resumen-carrito');
 const totalDOM = document.getElementById('checkout-total');
 const btnFinalizar = document.getElementById('btn-finalizar-compra');
-const numeroTelefono = "584143894452"; 
+const numeroTelefono = "584143894452"; // El número de Zahara
 
-let totalDivisas = 0; // Ahora lo llamamos divisas para que sirva para $ o €
+let totalDivisas = 0; 
 let tasaActual = 0; 
 
 // --- 1. CONECTAR A LA API DEL EURO BCV ---
@@ -24,7 +24,6 @@ async function cargarTasaBCV() {
         
         document.getElementById('tasa-bcv-texto').innerText = `Bs. ${tasaActual.toFixed(2)}`;
         actualizarMontoBolivares();
-        
     } catch (error) {
         console.error("Error al cargar la API del Euro BCV:", error);
         document.getElementById('tasa-bcv-texto').innerText = "Error al conectar.";
@@ -37,36 +36,12 @@ async function cargarTasaBCV() {
 function actualizarMontoBolivares() {
     if (tasaActual > 0 && totalDivisas > 0) {
         const totalBolivares = totalDivisas * tasaActual;
-        
         const totalBsDOM = document.getElementById('checkout-total-bs');
         if (totalBsDOM) totalBsDOM.innerText = `Bs. ${totalBolivares.toFixed(2)}`;
-        
-        const inputMonto = document.getElementById('monto-pagomovil');
-        if (inputMonto) inputMonto.value = totalBolivares.toFixed(2);
     }
 }
 
-// --- 3. LÓGICA DE PESTAÑAS (DINÁMICO) ---
-const radiosPago = document.querySelectorAll('input[name="metodo_pago"]');
-const formPagoMovil = document.getElementById('formulario-pagomovil');
-const formBinance = document.getElementById('formulario-binance');
-const formPayPal = document.getElementById('formulario-paypal'); // Cambiado a PayPal
-
-if (radiosPago.length > 0) {
-    radiosPago.forEach(radio => {
-        radio.addEventListener('change', (e) => {
-            if(formPagoMovil) formPagoMovil.style.display = 'none';
-            if(formBinance) formBinance.style.display = 'none';
-            if(formPayPal) formPayPal.style.display = 'none';
-            
-            if (e.target.value === 'pagomovil' && formPagoMovil) formPagoMovil.style.display = 'block';
-            if (e.target.value === 'binance' && formBinance) formBinance.style.display = 'block';
-            if (e.target.value === 'paypal' && formPayPal) formPayPal.style.display = 'block';
-        });
-    });
-}
-
-// --- 4. CARGAR CARRITO ---
+// --- 3. CARGAR CARRITO ---
 function cargarResumenCompra() {
     if (!contenedorResumen) return;
     contenedorResumen.innerHTML = '';
@@ -90,10 +65,9 @@ function cargarResumenCompra() {
     actualizarMontoBolivares(); 
 }
 
-// --- 5. ENVIAR A LUMINA (NUEVO FLUJO AUTOMATIZADO) ---
+// --- 4. 🌟 NUEVO FLUJO: GENERAR ORDEN Y ENVIAR A WHATSAPP ---
 if (btnFinalizar) {
     btnFinalizar.addEventListener('click', async () => {
-        // 1. Solo pedimos los datos de contacto básicos
         const nombre = document.getElementById('cliente-nombre').value.trim();
         const telefono = document.getElementById('cliente-telefono').value.trim();
         
@@ -101,80 +75,72 @@ if (btnFinalizar) {
             return Swal.fire({
                 icon: 'error',
                 title: 'Datos incompletos',
-                text: 'Por favor ingresa tu nombre y teléfono para procesar el envío.',
+                text: 'Por favor ingresa tu nombre y teléfono para procesar el pedido.',
                 confirmButtonColor: '#28a745',
                 background: '#1a1a1a',
                 color: '#fff'
             });
         }
 
-        btnFinalizar.innerText = "CONECTANDO CON LA PASARELA... 🔒";
+        btnFinalizar.innerText = "PREPARANDO ORDEN... ⏳";
         btnFinalizar.disabled = true;
 
         try {
-            // 2. Registramos la orden en el Backend de Zahara como "Pendiente"
+            // 1. Guardamos la orden en el Backend
             const respuesta = await fetch(`${API_URL}/api/ordenes`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
-                    clienteNombre: nombre,
-                    clienteTelefono: telefono,
-                    metodoPago: "Lumina Gateway", // Esto se actualizará luego
-                    referencia: "Pendiente de pago", 
-                    totalPagado: totalDivisas,
-                    detalleCarrito: carrito 
+                    cliente: nombre,
+                    telefono: telefono,
+                    total: totalDivisas,
+                    detalleCarrito: JSON.stringify(carrito) 
                 })
             });
 
-            // Obtenemos la orden que tu backend acaba de guardar
-            const ordenCreada = await respuesta.json();
-            
-            // Extraemos el ID real que Prisma le asignó a esta orden
-            // (Asegúrate de que tu API devuelve el ID. Si lo devuelve como 'id', usamos ese)
-            const idDeLaOrden = ordenCreada.id; 
+            let idDeLaOrden = "Pendiente";
+            if (respuesta.ok) {
+                const ordenCreada = await respuesta.json();
+                idDeLaOrden = ordenCreada.id; 
+            }
 
-            // 3. Limpiamos el carrito local porque la orden ya está registrada en tu base de datos
+            // 2. Limpiamos el carrito local
             localStorage.setItem('carritoZahara', JSON.stringify([]));
 
-            // 4. ¡EL VIAJE A LUMINA!
-            // Reemplaza esto con el ID real de Zahara que está en tu panel de Lumina
-            const comercioId = "081ceb77-9eee-41fd-a6ee-dfcf2e6928aa"; 
-            
-            // Construimos la URL con el monto exacto y el ID de la orden
-            // Construimos la URL con tu nuevo dominio oficial
-const urlLumina = `https://luminapay.xyz/checkout?comercioId=${comercioId}&monto=${totalDivisas}&referencia=${idDeLaOrden}`;
+            // 3. Armamos el mensaje para el WhatsApp de Zahara
+            let mensaje = `¡Hola Zahara Store! 🔥%0A`;
+            mensaje += `Soy *${nombre}*. Acabo de hacer un pedido en la página web y quiero coordinar el pago.%0A%0A`;
+            mensaje += `*📦 DETALLES DE LA ORDEN #${idDeLaOrden}:*%0A`;
 
-            // 5. Redirigimos al cliente a pagar de forma segura
-            window.location.href = urlLumina;
+            carrito.forEach(item => {
+                mensaje += `- 1x ${item.nombre} ($${item.precio.toFixed(2)})%0A`;
+            });
+
+            mensaje += `%0A*💰 TOTAL A PAGAR: $${totalDivisas.toFixed(2)}*%0A`;
+            if(tasaActual > 0) {
+                mensaje += `*(Equivalente: Bs. ${(totalDivisas * tasaActual).toFixed(2)})*%0A`;
+            }
+            mensaje += `%0APor favor, indíquenme los métodos de pago disponibles para transferirles. ¡Gracias!`;
+
+            // 4. Redirigimos al cliente directo al WhatsApp
+            const urlWhatsApp = `https://wa.me/${numeroTelefono}?text=${mensaje}`;
+            window.location.href = urlWhatsApp;
 
         } catch (error) {
             console.error(error);
             Swal.fire({ 
                 icon: 'error', 
                 title: 'Error de conexión', 
-                text: 'No pudimos conectar con el servidor de pagos. Intenta de nuevo.',
+                text: 'No pudimos generar la orden. Intenta de nuevo.',
                 background: '#1a1a1a',
                 color: '#fff'
             });
-            btnFinalizar.innerText = "IR A PAGAR";
+            btnFinalizar.innerText = "FINALIZAR COMPRA";
             btnFinalizar.disabled = false;
         }
     });
 }
 
-// --- 6. FUNCIÓN GLOBAL PARA ABRIR WHATSAPP DESDE LA FACTURA ---
-window.enviarComprobanteWA = function(nombreCliente, metodo, ref) {
-    let mensaje = `¡Hola Zahara Store! 🔥%0A`;
-    mensaje += `Soy *${nombreCliente}*. Acabo de registrar mi orden en la página web y aquí les envío mi comprobante de pago.%0A%0A`;
-    mensaje += `*🧾 DATOS REGISTRADOS:*%0A`;
-    mensaje += `Método: ${metodo}%0A`;
-    mensaje += `Referencia: ${ref}%0A%0A`;
-    mensaje += `(Aquí adjunto mi capture 👇)`;
-    
-    const urlWhatsApp = `https://wa.me/${numeroTelefono}?text=${mensaje}`;
-    window.location.href = urlWhatsApp;
-};
-
-// ARRANQUE DE LA PASARELA
+// ARRANQUE
 cargarTasaBCV();
 cargarResumenCompra();

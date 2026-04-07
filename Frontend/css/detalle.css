@@ -28,10 +28,10 @@ body {
 .col-imagen img {
     width: 100%;
     aspect-ratio: 1 / 1;
-    object-fit: cover;
+    object-fit: contain; 
     border-radius: 8px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    background: #111;
+    background: #0a0a0a; 
 }
 
 /* Lado Derecho: Información */
