@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Pago Exitoso! - Zahara Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .tarjeta-exito {
+            background-color: #111;
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 400px;
+            width: 90%;
+        }
+        h1 {
+            font-family: 'Anton', sans-serif;
+            color: #28a745;
+            letter-spacing: 2px;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        p { color: #ccc; line-height: 1.6; margin-bottom: 30px; }
+        .btn-volver {
+            background-color: #ffffff;
+            color: #000000;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: bold;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+        .btn-volver:hover { background-color: #cccccc; }
+    </style>
+</head>
+<body>
+
+    <div class="tarjeta-exito">
+        <h1>¡PAGO EXITOSO! 🎉</h1>
+        <p>Tu orden ha sido procesada por Lumina Pay. Ya estamos preparando tu pedido. Nos comunicaremos contigo muy pronto para coordinar la entrega.</p>
+        <a href="index.html" class="btn-volver">Volver a la Tienda</a>
+    </div>
+
+    <script>
+        // ESTA ES LA MAGIA: Borramos el carrito de la memoria del navegador
+        localStorage.removeItem('carritoZahara');
+        console.log("El carrito ha sido vaciado exitosamente.");
+    </script>
+
+</body>
+</html>

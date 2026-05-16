@@ -1,5 +1,4 @@
-// const API_URL = 'http://localhost:3000'; 
-const API_URL = 'https://zahara-api.onrender.com';
+const API_URL = 'http://localhost:3000'; // Cámbialo a tu URL de Render cuando subas a producción
 let carrito = JSON.parse(localStorage.getItem('carritoZahara')) || [];
 
 // 🚨 REGLA DE SEGURIDAD
@@ -10,7 +9,6 @@ if (carrito.length === 0) {
 const contenedorResumen = document.getElementById('resumen-carrito');
 const totalDOM = document.getElementById('checkout-total');
 const btnFinalizar = document.getElementById('btn-finalizar-compra');
-const numeroTelefono = "584143894452"; // El número de Zahara
 
 let totalDivisas = 0; 
 let tasaActual = 0; 
@@ -32,7 +30,7 @@ async function cargarTasaBCV() {
     }
 }
 
-// --- 2. CALCULAR TOTAL BS Y AUTOCOMPLETAR ---
+// --- 2. CALCULAR TOTAL BS ---
 function actualizarMontoBolivares() {
     if (tasaActual > 0 && totalDivisas > 0) {
         const totalBolivares = totalDivisas * tasaActual;
@@ -65,79 +63,62 @@ function cargarResumenCompra() {
     actualizarMontoBolivares(); 
 }
 
-// --- 4. 🌟 NUEVO FLUJO: GENERAR ORDEN Y ENVIAR A WHATSAPP ---
-if (btnFinalizar) {
-    btnFinalizar.addEventListener('click', async () => {
-        const nombre = document.getElementById('cliente-nombre').value.trim();
-        const telefono = document.getElementById('cliente-telefono').value.trim();
-        
-        if (!nombre || !telefono) {
-            return Swal.fire({
-                icon: 'error',
-                title: 'Datos incompletos',
-                text: 'Por favor ingresa tu nombre y teléfono para procesar el pedido.',
-                confirmButtonColor: '#28a745',
-                background: '#1a1a1a',
-                color: '#fff'
-            });
-        }
+// --- 4. PROCESAR PAGO SEGURO ---
+const procesarPagoSeguro = async () => {
+    const inputNombre = document.getElementById('nombre-cliente');
+    const inputTelefono = document.getElementById('telefono-cliente');
+    
+    const nombreCliente = inputNombre ? inputNombre.value.trim() : "";
+    const telefonoCliente = inputTelefono ? inputTelefono.value.trim() : "";
 
-        btnFinalizar.innerText = "PREPARANDO ORDEN... ⏳";
-        btnFinalizar.disabled = true;
+    if (!nombreCliente || !telefonoCliente) {
+        alert("Por favor, ingresa tu nombre y teléfono antes de continuar.");
+        return;
+    }
 
-        try {
-            // 1. Guardamos la orden en el Backend
-            const respuesta = await fetch(`${API_URL}/api/ordenes`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    cliente: nombre,
-                    telefono: telefono,
-                    total: totalDivisas,
-                    detalleCarrito: JSON.stringify(carrito) 
-                })
-            });
+    btnFinalizar.innerText = "Conectando de forma segura... ⏳";
+    btnFinalizar.disabled = true;
 
-            let idDeLaOrden = "Pendiente";
-            if (respuesta.ok) {
-                const ordenCreada = await respuesta.json();
-                idDeLaOrden = ordenCreada.id; 
-            }
+    try {
+        // 🛡️ MAGIA: Solo le hablamos a nuestro propio backend (Zahara)
+        const respuesta = await fetch(`${API_URL}/api/ordenes`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                cliente: nombreCliente,
+                telefono: telefonoCliente,
+                total: parseFloat(totalDivisas.toFixed(2)),
+                detalleCarrito: JSON.stringify(carrito)
+            })
+        });
 
-            // 2. Limpiamos el carrito local
+        const data = await respuesta.json();
+
+        if (respuesta.ok && data.url_pago) {
+            // El backend nos devolvió el link de Lumina, borramos el carrito
             localStorage.setItem('carritoZahara', JSON.stringify([]));
-
-            // 3. Armamos el mensaje para el WhatsApp de Zahara
-            let mensaje = `¡Hola Zahara Store! 🔥%0A`;
-            mensaje += `Soy *${nombre}*. Acabo de hacer un pedido en la página web y quiero coordinar el pago.%0A%0A`;
-            mensaje += `*📦 DETALLES DE LA ORDEN #${idDeLaOrden}:*%0A`;
-
-            carrito.forEach(item => {
-                mensaje += `- 1x ${item.nombre} ($${item.precio.toFixed(2)})%0A`;
-            });
-
-            mensaje += `%0A*💰 TOTAL A PAGAR: $${totalDivisas.toFixed(2)}*%0A`;
-            if(tasaActual > 0) {
-                mensaje += `*(Equivalente: Bs. ${(totalDivisas * tasaActual).toFixed(2)})*%0A`;
-            }
-            mensaje += `%0APor favor, indíquenme los métodos de pago disponibles para transferirles. ¡Gracias!`;
-
-            // 4. Redirigimos al cliente directo al WhatsApp
-            const urlWhatsApp = `https://wa.me/${numeroTelefono}?text=${mensaje}`;
-            window.location.href = urlWhatsApp;
-
-        } catch (error) {
-            console.error(error);
-            Swal.fire({ 
-                icon: 'error', 
-                title: 'Error de conexión', 
-                text: 'No pudimos generar la orden. Intenta de nuevo.',
-                background: '#1a1a1a',
-                color: '#fff'
-            });
-            btnFinalizar.innerText = "FINALIZAR COMPRA";
-            btnFinalizar.disabled = false;
+            // ¡Viaje directo al checkout de Lumina!
+            window.location.href = data.url_pago; 
+        } else {
+            throw new Error(data.error || "No se recibió el link de pago");
         }
+
+    } catch (error) {
+        console.error("Error en el proceso:", error);
+        alert("Hubo un error al generar tu pago. Intenta de nuevo.");
+        btnFinalizar.innerText = "Pagar y Finalizar Compra";
+        btnFinalizar.disabled = false;
+    }
+};
+
+// --- 5. VINCULAR EVENTOS ---
+if (btnFinalizar) {
+    btnFinalizar.addEventListener('click', () => {
+        if (carrito.length === 0) {
+            alert("Tu carrito está vacío.");
+            return;
+        }
+        procesarPagoSeguro();
     });
 }
 
