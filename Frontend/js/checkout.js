@@ -1,4 +1,5 @@
-const API_URL = 'http://localhost:3000'; // Cámbialo a tu URL de Render cuando subas a producción
+// const API_URL = 'http://localhost:3000'; // Cámbialo a tu URL de Render cuando subas a producción
+const API_URL = 'https://zahara-api.onrender.com';
 let carrito = JSON.parse(localStorage.getItem('carritoZahara')) || [];
 
 // 🚨 REGLA DE SEGURIDAD

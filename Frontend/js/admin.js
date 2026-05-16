@@ -1,6 +1,6 @@
 // Asegúrate de que esta URL sea la correcta
-const API_URL = 'http://localhost:3000'; 
-// const API_URL = 'https://zahara-api.onrender.com';
+// const API_URL = 'http://localhost:3000'; 
+const API_URL = 'https://zahara-api.onrender.com';
 
 // ==========================================
 // 1. LÓGICA DE LOGIN (login.html)
