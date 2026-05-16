@@ -66,8 +66,8 @@ function cargarResumenCompra() {
 
 // --- 4. PROCESAR PAGO SEGURO ---
 const procesarPagoSeguro = async () => {
-    const inputNombre = document.getElementById('nombre-cliente');
-    const inputTelefono = document.getElementById('telefono-cliente');
+    const inputNombre = document.getElementById('cliente-nombre');
+    const inputTelefono = document.getElementById('cliente-telefono');
     
     const nombreCliente = inputNombre ? inputNombre.value.trim() : "";
     const telefonoCliente = inputTelefono ? inputTelefono.value.trim() : "";
