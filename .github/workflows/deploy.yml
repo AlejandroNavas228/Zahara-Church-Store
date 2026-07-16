@@ -1,0 +1,38 @@
+name: Deploy Frontend to GitHub Pages
+
+on:
+  # Esto hace que se actualice la página cada vez que subas cambios a la rama principal
+  push:
+    branches: ["main"] # Si tu rama se llama 'master', cámbialo a "master"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # ¡AQUÍ ESTÁ LA MAGIA! Le decimos que solo tome la carpeta Frontend
+          path: './Frontend'
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
