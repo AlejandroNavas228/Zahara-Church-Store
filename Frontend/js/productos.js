@@ -4,11 +4,12 @@ const productosZahara = [
         nombre: "KEEP YOUR EYES ON JESUS",
         precio: 20.00,
         // Imagen principal (para el catálogo)
-        imagen: "assets/img/keep-your-eyes-on-jesus.jpeg", 
+        imagen: "assets/img/keep-your-eyes-on-jesus-frente.jpeg", 
         descripcion: "Camisa de algodón pesado, corte oversize. Diseño en color negro con estampado tipográfico.",
         // Galería de imágenes (para el detalle)
         imagenes: [
-            "assets/img/keep-your-eyes-on-jesus.jpeg"
+            "assets/img/keep-your-eyes-on-jesus-frente.jpeg",
+            "assets/img/keep-your-eyes-on-jesus-atras.jpeg"
         ]
     },
     {
@@ -24,7 +25,7 @@ const productosZahara = [
     },
     {
         id: 3,
-        nombre: "TALITA CUMI (Negra)",
+        nombre: "TALITA CUMI",
         precio: 20.00,
         imagen: "assets/img/talita-cumi-cris.jpeg",
         descripcion: "Diseño minimalista en color negro con estampado gráfico en el pecho.",
@@ -45,7 +46,7 @@ const productosZahara = [
     },
     {
         id: 5,
-        nombre: "KEEP YOUR EYES ON JESUS (Blanco)",
+        nombre: "KEEP YOUR EYES ON JESUS (Blanca)",
         precio: 20.00,
         imagen: "assets/img/keep-your-eyes-on-jesus-blanca.jpeg",
         descripcion: "Camisa de algodón pesado, corte oversize en color blanco con estampado frontal.",
