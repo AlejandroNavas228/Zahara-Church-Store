@@ -1,5 +1,3 @@
-// const API_URL = 'http://localhost:3000'; // Cámbialo a tu URL de Render cuando subas a producción
-const API_URL = 'https://zahara-api.onrender.com';
 let carrito = JSON.parse(localStorage.getItem('carritoZahara')) || [];
 
 // 🚨 REGLA DE SEGURIDAD
@@ -21,13 +19,11 @@ async function cargarTasaBCV() {
         const datos = await respuesta.json();
         tasaActual = datos.promedio;
         
-        document.getElementById('tasa-bcv-texto').innerText = `Bs. ${tasaActual.toFixed(2)}`;
         actualizarMontoBolivares();
     } catch (error) {
         console.error("Error al cargar la API del Euro BCV:", error);
-        document.getElementById('tasa-bcv-texto').innerText = "Error al conectar.";
         const totalBsDOM = document.getElementById('checkout-total-bs');
-        if (totalBsDOM) totalBsDOM.innerText = "Tasa no disponible";
+        if (totalBsDOM) totalBsDOM.innerText = "Tasa BCV no disponible";
     }
 }
 
@@ -35,6 +31,8 @@ async function cargarTasaBCV() {
 function actualizarMontoBolivares() {
     if (tasaActual > 0 && totalDivisas > 0) {
         const totalBolivares = totalDivisas * tasaActual;
+        
+        // Actualizamos el panel lateral
         const totalBsDOM = document.getElementById('checkout-total-bs');
         if (totalBsDOM) totalBsDOM.innerText = `Bs. ${totalBolivares.toFixed(2)}`;
     }
@@ -49,67 +47,81 @@ function cargarResumenCompra() {
     carrito.forEach(item => {
         const div = document.createElement('div');
         div.classList.add('item-resumen');
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        div.style.marginBottom = '15px';
+        
         div.innerHTML = `
             <img src="${item.imagen}" alt="${item.nombre}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #444;">
             <div style="flex: 1; margin-left: 15px;">
                 <p style="margin: 0; font-weight: bold; color: #fff;">${item.nombre}</p>
             </div>
-            <div style="font-weight: bold; color: #28a745;">$${item.precio.toFixed(2)}</div>
+            <div style="font-weight: bold; color: #28a745;">€${item.precio.toFixed(2)}</div>
         `;
         contenedorResumen.appendChild(div);
         totalDivisas += item.precio;
     });
 
-    if (totalDOM) totalDOM.innerText = `$${totalDivisas.toFixed(2)}`;
+    if (totalDOM) totalDOM.innerText = `€${totalDivisas.toFixed(2)}`;
     actualizarMontoBolivares(); 
 }
 
-// --- 4. PROCESAR PAGO SEGURO ---
-const procesarPagoSeguro = async () => {
+// --- 4. 🌟 PROCESAR PAGO DIRECTO A WHATSAPP ---
+const procesarPagoSeguro = () => {
+    // Capturamos todos los datos de facturación
     const inputNombre = document.getElementById('cliente-nombre');
+    const inputCedula = document.getElementById('cliente-cedula');
     const inputTelefono = document.getElementById('cliente-telefono');
+    const inputDireccion = document.getElementById('cliente-direccion');
     
     const nombreCliente = inputNombre ? inputNombre.value.trim() : "";
+    const cedulaCliente = inputCedula ? inputCedula.value.trim() : "";
     const telefonoCliente = inputTelefono ? inputTelefono.value.trim() : "";
+    const direccionCliente = inputDireccion ? inputDireccion.value.trim() : "";
 
-    if (!nombreCliente || !telefonoCliente) {
-        alert("Por favor, ingresa tu nombre y teléfono antes de continuar.");
+    // Validación simple
+    if (!nombreCliente || !cedulaCliente || !telefonoCliente) {
+        alert("Por favor, completa tus datos de facturación para continuar.");
         return;
     }
 
-    btnFinalizar.innerText = "Conectando de forma segura... ⏳";
+    btnFinalizar.innerText = "Preparando tu orden... ⏳";
     btnFinalizar.disabled = true;
 
-    try {
-        // 🛡️ MAGIA: Solo le hablamos a nuestro propio backend (Zahara)
-        const respuesta = await fetch(`${API_URL}/api/ordenes`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                cliente: nombreCliente,
-                telefono: telefonoCliente,
-                total: parseFloat(totalDivisas.toFixed(2)),
-                detalleCarrito: JSON.stringify(carrito)
-            })
-        });
+    // Número de WhatsApp de Zahara Store
+    const numeroWhatsApp = "584143894452";
 
-        const data = await respuesta.json();
+    // Armamos el mensaje para WhatsApp
+    let mensaje = `¡Hola Zahara Store! 🔥%0A`;
+    mensaje += `Acabo de realizar un pedido en la tienda web. Aquí están mis datos:%0A%0A`;
+    
+    mensaje += `*📄 DATOS DE FACTURACIÓN:*%0A`;
+    mensaje += `- Nombre: ${nombreCliente}%0A`;
+    mensaje += `- Cédula/RIF: ${cedulaCliente}%0A`;
+    mensaje += `- Teléfono: ${telefonoCliente}%0A`;
+    if (direccionCliente) mensaje += `- Dirección: ${direccionCliente}%0A`;
+    
+    mensaje += `%0A*📦 DETALLES DE LA ORDEN:*%0A`;
+    carrito.forEach(item => {
+        mensaje += `- 1x ${item.nombre} (€${item.precio.toFixed(2)})%0A`;
+    });
 
-        if (respuesta.ok && data.url_pago) {
-            // El backend nos devolvió el link de Lumina, borramos el carrito
-            localStorage.setItem('carritoZahara', JSON.stringify([]));
-            // ¡Viaje directo al checkout de Lumina!
-            window.location.href = data.url_pago; 
-        } else {
-            throw new Error(data.error || "No se recibió el link de pago");
-        }
-
-    } catch (error) {
-        console.error("Error en el proceso:", error);
-        alert("Hubo un error al generar tu pago. Intenta de nuevo.");
-        btnFinalizar.innerText = "Pagar y Finalizar Compra";
-        btnFinalizar.disabled = false;
+    mensaje += `%0A*💰 TOTAL A PAGAR: €${totalDivisas.toFixed(2)}*%0A`;
+    
+    // Agregamos el equivalente en Bs si la API cargó
+    if (tasaActual > 0) {
+        const totalBs = (totalDivisas * tasaActual).toFixed(2);
+        mensaje += `*(Equivalente: Bs. ${totalBs})*%0A`;
     }
+    
+    mensaje += `%0A¡Quedo atento/a para coordinar el pago!`;
+
+    // Limpiamos el carrito local
+    localStorage.setItem('carritoZahara', JSON.stringify([]));
+
+    // Redirigimos al cliente directo al WhatsApp
+    const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensaje}`;
+    window.location.href = urlWhatsApp;
 };
 
 // --- 5. VINCULAR EVENTOS ---

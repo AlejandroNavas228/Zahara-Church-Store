@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/Frontend/">
     <title>Zahara Church Store</title>
     <link rel="icon" type="image/png" href="assets/img/logo.jpeg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,16 +13,49 @@
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/catalogo.css">
-    <meta property="og:title" content="Zahara Church Store 🔥">
+    <meta property="og:title" content="Zahara Church Store">
     <meta property="og:description" content="Descubre nuestra nueva colección. Ropa con propósito y el mejor estilo. ¡Compra online ahora!">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://zaharachurch.store">
     <meta property="og:image" content="assets/img/logo.jpeg">
+
+    <!-- ESTILOS PARA ANIMACIONES TIPO DELASSUS -->
+    <style id="scroll-animations">
+        /* Estado inicial del elemento (oculto y desplazado hacia abajo) */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            will-change: opacity, transform;
+        }
+
+        /* Estado final cuando el elemento entra en pantalla */
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Clases opcionales para crear un efecto cascada (stagger) */
+        .delay-1 { transition-delay: 100ms; }
+        .delay-2 { transition-delay: 200ms; }
+        .delay-3 { transition-delay: 300ms; }
+    </style>
 </head>
 <body>
+
+    <!-- BANNER COLECCIÓN MINIMALISTA -->
+    <div class="hero-catalogo">
+        <header class="hero-banner">
+            <!-- Agregamos la animación al logo principal con un pequeño retraso -->
+            <img src="assets/img/logo.jpeg" alt="Zahara Store Logo" class="logo-principal animate-on-scroll delay-1">
+        </header>
+        <div class="separador-degradado"></div>
+    </div>
+
+    <!-- NAVEGACIÓN -->
     <header class="header">
         <div class="logo-container">
-            <h2 class="logo-texto">ZAHARA</h2> 
+            <h2 class="logo-texto animate-on-scroll">ZAHARA</h2> 
         </div>
 
         <button class="menu-toggle" id="menu-toggle">☰</button>
@@ -35,64 +69,54 @@
         </nav>
        <div class="cart-icon">
             <button class="btn-carrito">
-                <i class="fa-solid fa-bag-shopping"></i> (0)
+                <i class="fa-solid fa-cart-shopping"></i> (0)
             </button>
         </div>
     </header>
 
-    <!-- <main class="hero" style="background-image: url('assets/img/logo.jpeg'); background-size: cover; background-position: center; padding: 100px 20px; text-align: center; position: relative;">
-        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4);"></div>
-        
-        <div class="hero-content" style="position: relative; z-index: 1;">
-            <h1 style="color: white; font-size: 3rem; text-transform: uppercase;">Viste tu Fe</h1>
-            <p style="color: #f0f0f0; font-size: 1.2rem; margin-bottom: 20px;">Diseños con propósito y estilo urbano.</p>
-            <a href="#coleccion"><button class="cta-button" style="background: white; color: black; padding: 12px 24px; border: none; font-weight: bold; cursor: pointer;">Ver Catálogo</button></a>
-        </div>
-    </main> -->
-
-    <!-- <section class="video-destacado" style="max-width: 800px; margin: 40px auto; padding: 0 20px;">
-        <div class="contenedor-iframe" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
-            <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://youtu.be/dF7ftfKxowM?si=ojNStuIh7PSSOO9i" title="Video Zahara Store" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-    </section> -->
-
-    <section class="catalogo" id="coleccion" style="background-color: #000000; padding: 40px 20px;">
-        <h2 class="titulo-seccion" style="text-align: center; color: #333; margin-bottom: 30px;">Nueva Colección</h2>
+    <!-- CATÁLOGO DE PRODUCTOS -->
+    <section class="catalogo" id="coleccion" style="background-color: #050505; padding: 40px 20px;">
+        <h2 class="titulo-seccion animate-on-scroll" style="text-align: center; color: #ffffff; margin-bottom: 30px;">Nueva Colección</h2>
+        <!-- Contenedor listo para el CSS Grid -->
         <div class="grid-productos" id="contenedor-productos"></div>
     </section>
 
+    <!-- FOOTER -->
     <footer id="contacto">
-    <div class="contenedor-footer">
-        <div class="footer-columna izquierda">
-            <div class="marca-container">
-                <img src="assets/img/logo.jpeg" alt="Logo Zahara" class="logo-footer">
-                <h3>ZAHARA</h3>
+        <div class="contenedor-footer">
+            <!-- Animación para la columna izquierda -->
+            <div class="footer-columna izquierda animate-on-scroll delay-1">
+                <div class="marca-container">
+                    <img src="assets/img/logo.jpeg" alt="Logo Zahara" class="logo-footer">
+                    <h3>ZAHARA</h3>
+                </div>
+                <p>Diseños con propósito y estilo urbano.</p>
             </div>
-            <p>Diseños con propósito y estilo urbano.</p>
+            
+            <!-- Animación para la columna derecha -->
+            <div class="footer-columna derecha animate-on-scroll delay-2">
+                <h3>CONTACTO</h3>
+                <div class="enlaces-contacto">
+                    <a href="https://www.instagram.com/zahara_sstore/?utm_source=ig_web_button_share_sheet" target="_blank" class="enlace-icono insta">
+                        <i class="fa-brands fa-instagram"></i> Instagram: @zahara_sstore
+                    </a>
+                    <a href="https://wa.me/584143894452" target="_blank" class="enlace-icono whats">
+                        <i class="fa-brands fa-whatsapp"></i> WhatsApp: +58 414 389 4452
+                    </a>
+                </div>
+            </div>
         </div>
         
-        <div class="footer-columna derecha">
-            <h3>CONTACTO</h3>
-            <div class="enlaces-contacto">
-                <a href="https://www.instagram.com/zahara_sstore/?utm_source=ig_web_button_share_sheet" target="_blank" class="enlace-icono insta">
-                    <i class="fa-brands fa-instagram"></i> Instagram: @zahara_sstore
-                </a>
-                <a href="https://wa.me/584143894452" target="_blank" class="enlace-icono whats">
-                    <i class="fa-brands fa-whatsapp"></i> WhatsApp: +58 414 389 4452
-                </a>
-            </div>
+        <div class="barra-inferior animate-on-scroll delay-3">
+            <p class="copyright">
+                &copy; <a href="login.html" style="text-decoration: none; color: inherit; cursor: default;">2026</a> Zahara Church Store. Todos los derechos reservados.
+            </p>
+            <p class="firma-dev">Desarrollado por <strong>Alejandro Navas</strong></p>
         </div>
-    </div>
-    
-    <div class="barra-inferior">
-        <p class="copyright">
-            &copy; <a href="login.html" style="text-decoration: none; color: inherit; cursor: default;">2026</a> Zahara Church Store. Todos los derechos reservados.
-        </p>
-        <p class="firma-dev">Desarrollado por <strong>Alejandro Navas</strong></p>
-    </div>
     </footer>
 
-<div class="carrito-overlay" id="carrito-overlay"></div>
+    <!-- MODALES Y OVERLAYS -->
+    <div class="carrito-overlay" id="carrito-overlay"></div>
     <aside class="carrito-panel" id="carrito-panel">
         <div class="carrito-header">
             <h2>Tu Pedido</h2>
@@ -124,16 +148,44 @@
                 <button class="btn-flecha der" onclick="cambiarFoto(1)">&#10095;</button>
             </div>
             
-            <div id="indicadores-galeria" class="indicadores">
-                </div>
+            <div id="indicadores-galeria" class="indicadores"></div>
         </div>
     </div>
 
-    <a href="https://wa.me/584143894452?text=¡Hola Zahara Store! Me interesa su ropa 🔥" class="whatsapp-flotante" target="_blank" rel="noopener noreferrer">
+    <!-- BOTÓN WHATSAPP -->
+    <a href="https://wa.me/584143894452?text=¡Hola Zahara Store! Me interesa su ropa 🔥" class="whatsapp-flotante animate-on-scroll delay-3" target="_blank" rel="noopener noreferrer">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
+    <!-- SCRIPT DE INTERSECTION OBSERVER PARA LAS ANIMACIONES -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Configuramos el observador
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15 // El elemento se animará cuando el 15% sea visible
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Añade la clase que activa el CSS
+                        entry.target.classList.add('is-visible');
+                        // Dejamos de observar el elemento para que la animación solo ocurra una vez
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            // Seleccionamos todos los elementos con la clase base y los observamos
+            const animatableElements = document.querySelectorAll('.animate-on-scroll');
+            animatableElements.forEach(el => observer.observe(el));
+        });
+    </script>
+
+    <script src="js/productos.js"></script>
     <script src="js/app.js"></script>
     
-    </body>
+</body>
 </html>

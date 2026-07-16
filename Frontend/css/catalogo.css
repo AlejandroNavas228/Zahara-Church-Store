@@ -39,3 +39,18 @@
 .btn-pagar { width: 100%; padding: 15px; background-color: #ffffff; color: #000000; border: none; font-weight: bold; font-size: 1.1rem; cursor: pointer; text-transform: uppercase; }
 .btn-pagar:hover { background-color: #888888; }
 @media (max-width: 768px) { .carrito-panel { width: 100%; right: -100%; } }
+
+/* ==========================================
+   ANIMACIONES TIPO DELASSUS (SCROLL CASCADA)
+   ========================================== */
+.fade-in-scroll {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: opacity, transform;
+}
+
+.fade-in-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+}

@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/Frontend/">
     <title>Completar Pedido - Zahara Store</title>
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/catalogo.css">
     <link rel="stylesheet" href="css/checkout.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <meta property="og:title" content="Zahara Church Store 🔥">
     <meta property="og:description" content="Descubre nuestra nueva colección. Ropa con propósito y el mejor estilo. ¡Compra online ahora!">
     <meta property="og:type" content="website">
@@ -31,30 +33,21 @@
         <div class="checkout-left">
             
             <section class="checkout-section">
-                <h2>1. ¿A quién le enviamos?</h2>
-                <p class="subtitle" style="margin-bottom: 15px; color: #aaa;">Necesitamos estos datos para contactarte sobre tu envío.</p>
-                <input type="text" id="cliente-nombre" class="input-checkout" placeholder="Tu Nombre y Apellido" required>
-                <input type="tel" id="cliente-telefono" class="input-checkout" placeholder="Teléfono (WhatsApp)" required>
-            </section>
-
-            <section class="checkout-section">
-                <h2>2. Pago Seguro</h2>
+                <h2>Datos de Facturación y Envío</h2>
+                <p class="subtitle" style="margin-bottom: 20px; color: #aaa;">Completa esta información para generar tu pedido y coordinar el pago por WhatsApp.</p>
                 
-                <div style="background: #111; padding: 25px; border-radius: 10px; border: 1px solid #333; text-align: center; margin-bottom: 25px;">
-                    <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; font-size: 2rem; color: #555;">
-                        <i class="fa-brands fa-cc-visa"></i>
-                        <i class="fa-brands fa-cc-mastercard"></i>
-                        <i class="fa-brands fa-paypal"></i>
-                        <i class="fa-solid fa-money-bill-transfer"></i>
-                    </div>
-                    <p style="color: #ddd; font-size: 0.95rem; line-height: 1.5;">
-                        Serás redirigido a nuestra pasarela encriptada <strong>Lumina Pay</strong> para completar tu compra de forma rápida y segura.
-                    </p>
-                </div>
+                <input type="text" id="cliente-nombre" class="input-checkout" placeholder="Nombre y Apellido" required style="margin-bottom: 15px;">
+                
+                <input type="text" id="cliente-cedula" class="input-checkout" placeholder="Cédula / RIF" required style="margin-bottom: 15px;">
+                
+                <input type="tel" id="cliente-telefono" class="input-checkout" placeholder="Teléfono (WhatsApp)" required style="margin-bottom: 15px;">
+                
+                <textarea id="cliente-direccion" class="input-checkout" placeholder="Dirección exacta de entrega" rows="3" style="width: 100%; resize: none; margin-bottom: 15px;" required></textarea>
             </section>
 
-            <button id="btn-finalizar-compra" class="btn-block" style="display: flex; justify-content: center; align-items: center; gap: 10px; font-size: 1.1rem; padding: 18px;">
-                IR A PAGAR AHORA <i class="fa-solid fa-lock"></i>
+            <!-- Botón siempre visible y directo a WhatsApp -->
+            <button id="btn-finalizar-compra" class="btn-block" style="display: flex; justify-content: center; align-items: center; gap: 10px; font-size: 1.1rem; padding: 18px; background-color: #25D366; color: white; border: none; cursor: pointer; font-weight: bold; border-radius: 8px;">
+                FINALIZAR COMPRA POR WHATSAPP <i class="fa-brands fa-whatsapp" style="font-size: 1.3rem;"></i>
             </button>
         </div>
 
@@ -66,13 +59,14 @@
             <div class="resumen-totales">
                 <div class="fila-total" style="border-top: 2px solid #333; padding-top: 15px;">
                     <span style="font-size: 1.2rem;">Total a Pagar</span>
-                    <span id="checkout-total" style="color: #28a745; font-size: 1.5rem; font-weight: 900;">$0.00</span>
+                    <div style="text-align: right;">
+                        <span id="checkout-total" style="color: #28a745; font-size: 1.5rem; font-weight: 900; display: block;">€0.00</span>
+                        <span id="checkout-total-bs" style="color: #888; font-size: 0.9rem; font-weight: normal; display: block; margin-top: 5px;">Bs. 0.00</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div id="pantalla-factura" style="display: none; text-align: center; padding: 40px 20px;"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/checkout.js"></script> 

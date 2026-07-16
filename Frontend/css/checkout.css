@@ -1,188 +1,172 @@
-/* --- checkout.css (Modo Oscuro Zahara Store) --- */
+/* --- checkout.css (Modo Oscuro Zahara Store - Rediseño Minimalista) --- */
 
 .bg-checkout {
-    background-color: #0d0d0d; /* Fondo casi negro */
-    color: #f1f1f1; /* Letras blancas/gris claro */
-    font-family: Arial, sans-serif;
+    background-color: #050505; /* Unificamos con el negro de global.css */
+    color: #E0E0E0; /* Gris claro */
+    font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 0;
 }
 
 .checkout-header {
     text-align: center;
-    padding: 20px 0;
-    background-color: #000;
-    border-bottom: 1px solid #333;
+    padding: 25px 0;
+    background-color: transparent; /* Quitamos el fondo para hacerlo más limpio */
+    border-bottom: 1px solid #1A1A1A;
 }
 
 .checkout-header h1 {
-    color: #fff;
+    color: #FFFFFF;
     margin: 0;
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    letter-spacing: 2px;
 }
 
 .checkout-container {
     display: flex;
     flex-wrap: wrap-reverse; 
-    max-width: 1000px;
+    max-width: 1100px; /* Un poco más ancho para respirar */
     margin: 40px auto;
-    gap: 40px;
+    gap: 50px;
     padding: 0 20px;
 }
 
 .checkout-left {
-    flex: 1;
+    flex: 1.2; /* Ligeramente más ancho que el resumen */
     min-width: 300px;
 }
 
 .checkout-right {
-    flex: 1;
+    flex: 0.8;
     min-width: 300px;
-    background-color: #1a1a1a; /* Gris muy oscuro para el carrito */
-    border-left: 1px solid #333;
-    padding-left: 40px;
-    border-radius: 8px;
-    padding: 20px;
+    background-color: #0A0A0A; /* Apenas distinguible del fondo */
+    border: 1px solid #1A1A1A; /* Borde completo en lugar de solo izquierdo */
+    border-radius: 12px;
+    padding: 30px;
 }
 
 .checkout-section {
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
 
 .checkout-section h2 {
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-    color: #fff;
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+    color: #FFFFFF;
+    font-family: 'Inter', sans-serif;
 }
 
 .subtitle {
-    font-size: 0.85rem;
-    color: #aaa;
-    margin-bottom: 10px;
+    font-size: 0.9rem;
+    color: #888888;
+    margin-bottom: 25px;
+    line-height: 1.5;
 }
 
-/* Campos de texto (Inputs) oscuros */
+/* Campos de texto (Inputs) rediseño minimalista */
 .input-checkout {
     width: 100%;
-    padding: 12px;
-    margin-bottom: 12px;
-    background-color: #222;
-    color: #fff;
-    border: 1px solid #444;
-    border-radius: 5px;
+    padding: 15px 15px 15px 0; /* Padding solo arriba/abajo/derecha */
+    margin-bottom: 20px;
+    background-color: transparent; /* Fondo transparente */
+    color: #FFFFFF;
+    border: none;
+    border-bottom: 1px solid #333333; /* Solo línea inferior */
+    border-radius: 0;
     box-sizing: border-box;
-    font-size: 14px;
+    font-size: 15px;
+    font-family: 'Montserrat', sans-serif;
+    transition: border-color 0.3s ease;
+}
+
+.input-checkout::placeholder {
+    color: #555555;
 }
 
 .input-checkout:focus {
     outline: none;
-    border-color: #28a745; /* Borde verde al escribir */
+    border-bottom: 1px solid #FFFFFF; /* Línea blanca al enfocar */
 }
 
-/* Opciones de pago (Radios) */
-.opciones-pago {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.radio-label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 15px;
-    border: 1px solid #444;
-    border-radius: 5px;
-    background-color: #222;
-    color: #fff !important; /* Forzamos texto blanco */
-    transition: 0.3s;
-}
-
-.radio-label:hover {
-    border-color: #28a745;
-}
-
-.radio-label input {
-    margin: 0;
-    width: 18px;
-    height: 18px;
-    accent-color: #28a745; /* Pinta el circulito de verde */
-}
-
-/* Caja del método de pago seleccionado */
-.payment-method-box {
-    border: 1px solid #444;
-    background-color: #111;
-    border-radius: 5px;
-    overflow: hidden;
-    padding: 20px;
-}
-
-.instrucciones-pago {
-    background-color: #1e3021; /* Fondo verde oscuro */
-    padding: 15px;
-    border-radius: 5px;
-    border-left: 4px solid #28a745;
-    font-size: 0.95rem;
-    color: #d4edda; /* Letra verde clarito */
-    margin-bottom: 15px;
-}
-
-/* Botón de Pagar */
+/* Botón de Pagar por WhatsApp */
 .btn-block {
     width: 100%;
     padding: 18px;
-    background-color: #28a745; /* Verde Zahara Store */
+    background-color: #25D366; /* Verde WhatsApp */
     color: white;
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px; /* Bordes suaves */
     cursor: pointer;
-    margin-top: 20px;
-    transition: background 0.3s;
+    margin-top: 10px;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
 }
 
 .btn-block:hover {
-    background-color: #218838;
+    background-color: #20BD5A;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
 }
 
 /* Resumen carrito */
 .item-resumen {
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #333;
-    padding-bottom: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #1A1A1A;
+}
+
+.item-resumen img {
+    border-radius: 6px !important;
+    border: none !important; /* Quitamos el borde de las fotos pequeñas */
+    background-color: #111;
 }
 
 .item-resumen p {
-    color: #fff;
+    color: #E0E0E0;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
 }
 
 .fila-total {
     display: flex;
     justify-content: space-between;
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-top: 20px;
+    font-size: 1.1rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    margin-top: 10px;
     padding-top: 20px;
-    border-top: 1px solid #444;
-    color: #fff;
+    border-top: 1px dashed #333; /* Línea punteada sutil */
+    color: #E0E0E0;
+}
+
+#checkout-total {
+    color: #FFFFFF !important; /* El precio total destaca en blanco puro */
+    font-size: 1.6rem !important;
+    font-weight: 800 !important;
+}
+
+#checkout-total-bs {
+    color: #888888 !important;
 }
 
 /* Responsivo para móviles */
 @media (max-width: 768px) {
     .checkout-container {
         flex-direction: column-reverse;
-        gap: 20px;
+        gap: 30px;
         margin: 20px auto;
     }
     .checkout-right {
-        padding: 15px;
-        border-left: none;
-        border-bottom: 2px solid #333;
+        padding: 20px;
+        border: none;
+        border-bottom: 1px solid #1A1A1A;
+        border-radius: 0;
+        background-color: transparent;
     }
 }

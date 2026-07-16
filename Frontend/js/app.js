@@ -1,37 +1,22 @@
-// const API_URL = 'http://localhost:3000'; 
-const API_URL = 'https://zahara-api.onrender.com';
-
-let productos = []; 
+// Borramos las variables de API_URL porque ya no usamos servidor
+let productos = []; // Mantenemos esta variable para que el resto del código (como el carrito) siga funcionando igual
 
 document.getElementById('contenedor-productos').innerHTML = '<div style="grid-column: 1 / -1; width: 100%; text-align: center; padding: 40px 0;"><h3 style="color: #ffffff; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 1px;">Cargando colección exclusiva... ⏳</h3></div>';
 
-// Función actualizada para entender la nueva Base de Datos (con galerías y stock)
-async function cargarProductos() {
-    try {
-        const respuesta = await fetch(`${API_URL}/api/productos`);
-        const datosRaw = await respuesta.json(); 
+// 1. NUEVA FUNCIÓN CARGAR PRODUCTOS (¡Súper rápida, sin internet!)
+function cargarProductos() {
+    // Tomamos los datos directamente de tu archivo productos.js
+    productos = productosZahara;
 
-        // 🌟 MAPEO CORREGIDO CON LA BASE DE DATOS ACTUAL 🌟
-        productos = datosRaw.map(p => ({
-            id: p.id,
-            nombre: p.nombre,
-            precio: p.precio,   
-            imagen: p.imagen,   
-            stock: 10           
-        }));
-        
-        const contenedor = document.getElementById('contenedor-productos');
+    const contenedor = document.getElementById('contenedor-productos');
 
-        if (productos.length === 0) {
+    // Si tu archivo productos.js está vacío o no lo lee bien, mostramos el cartel
+    if (!productos || productos.length === 0) {
         if (contenedor) {
-            // ¡EL TRUCO DEFINITIVO! Apagamos la cuadrícula/flexbox para que ocupe toda la pantalla libremente
             contenedor.style.display = 'block'; 
-            
             contenedor.innerHTML = `
                 <div style="width: 100%; max-width: 800px; margin: 0 auto; padding: 20px; text-align: center; box-sizing: border-box;">
-                    
                     <img src="assets/img/Anuncio.webp" alt="Próximamente nueva colección" style="width: 100%; height: auto; border-radius: 12px; border: 1px solid #333333; margin-bottom: 25px; box-shadow: 0 10px 20px rgba(255,255,255,0.05);">
-                    
                     <p style="color: #ffffff; font-size: 1.5rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin: 0;">Próximamente nueva mercancía 🔥</p>
                     <p style="color: #888888; font-size: 1rem; margin-top: 10px;">¡Mantente atento a nuestras redes sociales!</p>
                 </div>
@@ -39,12 +24,11 @@ async function cargarProductos() {
         }
         return; 
     }
-        renderizarProductos(); 
-        
-    } catch (error) {
-        console.error("Error al cargar el catálogo desde Neon:", error);
-    }
+    
+    // Si sí hay productos, los dibujamos en pantalla
+    renderizarProductos(); 
 }
+
 // Variables y referencias del DOM
 const contenedorProductos = document.getElementById('contenedor-productos');
 let carrito = JSON.parse(localStorage.getItem('carritoZahara')) || [];
@@ -60,13 +44,17 @@ const totalCarritoDOM = document.getElementById('carrito-total');
 const btnMenu = document.getElementById('menu-toggle');
 const menuNavegacion = document.querySelector('.nav-links');
 
-btnMenu.addEventListener('click', () => {
-    menuNavegacion.classList.toggle('activo');
-});
+if(btnMenu) {
+    btnMenu.addEventListener('click', () => {
+        menuNavegacion.classList.toggle('activo');
+    });
+}
 
 // --- FUNCIÓN PARA MOSTRAR NOTIFICACIONES ---
 function mostrarNotificacion(mensaje, tipo = 'error') {
     const contenedor = document.getElementById('toast-container');
+    if (!contenedor) return;
+    
     const toast = document.createElement('div');
     toast.classList.add('toast');
     if (tipo === 'exito') toast.classList.add('exito');
@@ -83,113 +71,111 @@ function guardarCarritoEnLocalStorage() {
     localStorage.setItem('carritoZahara', JSON.stringify(carrito));
 }
 
-btnAbrirCarrito.addEventListener('click', () => {
-    panelCarrito.classList.add('abierto');
-    overlayCarrito.style.display = 'block';
-});
+if(btnAbrirCarrito) {
+    btnAbrirCarrito.addEventListener('click', () => {
+        panelCarrito.classList.add('abierto');
+        overlayCarrito.style.display = 'block';
+    });
+}
 
 function cerrarCarrito() {
     panelCarrito.classList.remove('abierto');
     overlayCarrito.style.display = 'none';
 }
 
-btnCerrarCarrito.addEventListener('click', cerrarCarrito);
-overlayCarrito.addEventListener('click', cerrarCarrito);
+if(btnCerrarCarrito) btnCerrarCarrito.addEventListener('click', cerrarCarrito);
+if(overlayCarrito) overlayCarrito.addEventListener('click', cerrarCarrito);
 
-// 2. DIBUJAR LOS PRODUCTOS EN PANTALLA
-// 2. DIBUJAR LOS PRODUCTOS EN PANTALLA
+
+// --- LÓGICA DEL SENSOR DE SCROLL ---
+const observadorScroll = new IntersectionObserver((entradas) => {
+    entradas.forEach((entrada) => {
+        // Cuando la tarjeta entra en la pantalla
+        if (entrada.isIntersecting) {
+            // Le agregamos una clase para que tu CSS haga el efecto visual
+            entrada.target.classList.add('visible'); 
+            // Dejamos de observarlo para no gastar memoria
+            observadorScroll.unobserve(entrada.target);
+        }
+    });
+}, {
+    threshold: 0.15 // Se activa cuando el 15% de la tarjeta ya es visible
+});
+
+// 2. DIBUJAR LOS PRODUCTOS EN PANTALLA (Limpiado: eliminamos el código duplicado)
 function renderizarProductos() {
     const contenedor = document.getElementById('contenedor-productos');
     if (!contenedor) return;
+    
     contenedor.innerHTML = '';
-
-    if (productos.length === 0) {
-        // Apagamos flexbox/grid para que el banner se centre libremente
-        contenedor.style.display = 'block'; 
-        
-        contenedor.innerHTML = `
-            <div style="width: 100%; max-width: 800px; margin: 0 auto; padding: 20px; text-align: center; box-sizing: border-box;">
-                <img src="assets/img/Anuncio.webp" alt="Próximamente nueva colección" style="width: 100%; height: auto; border-radius: 12px; border: 1px solid #333333; margin-bottom: 25px; box-shadow: 0 10px 20px rgba(255,255,255,0.05);">
-                <p style="color: #ffffff; font-size: 1.5rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin: 0;">Próximamente nueva mercancía 🔥</p>
-                <p style="color: #888888; font-size: 1rem; margin-top: 10px;">¡Mantente atento a nuestras redes sociales!</p>
-            </div>
-        `;
-        return; 
-    }
-
-    // Volvemos a encender el Grid por si hay productos
     contenedor.style.display = 'grid';
 
-    // AQUÍ INICIA EL CICLO CORRECTAMENTE
-    productos.forEach(producto => {
-        const div = document.createElement('div');
-        div.classList.add('producto');
-
-        const imagenPortada = producto.imagen || 'assets/img/placeholder.png';
-
-        div.innerHTML = `
-            <div style="position: relative;">
-                <a href="detalle.html?id=${producto.id}" target="_blank">
-                    <img src="${imagenPortada}" alt="${producto.nombre}" title="Ver detalles">
-                </a>
-            </div>
-            
-            <div class="producto-info-fila">
-                <div class="producto-textos">
-                    <h3>${producto.nombre}</h3>
-                    <p class="precio">$${producto.precio.toFixed(2)}</p>
-                </div>
-                
-                <button class="btn-agregar-cuadrado" onclick="agregarAlCarrito(${producto.id})" title="Agregar al carrito">
-                    <i class="fa-solid fa-plus"></i>
-                </button>
-            </div>
-        `;
-        contenedor.appendChild(div);
-    });
-}
-
-   productos.forEach(producto => {
+    // ¡Filtro eliminado! Ahora iteramos directamente sobre todos los productos
+    productos.forEach((producto, index) => {
         const div = document.createElement('div');
         
-        // Tarjeta oscura con borde sutil. 
-        div.style.cssText = "background: #0a0a0a; border: 1px solid #333333; border-radius: 12px; overflow: hidden; transition: all 0.3s ease;";
+        // 1. Agregamos la clase de animación de scroll que hicimos antes
+        div.classList.add('fade-in-scroll');
+        
+        // 2. Estilos limpios usando tus nuevas variables CSS
+        div.style.cssText = `
+            background: var(--card-bg); 
+            border: 1px solid var(--border-color); 
+            border-radius: 8px; 
+            overflow: hidden; 
+            transition: all 0.3s ease; 
+            display: flex; 
+            flex-direction: column; 
+            height: 100%;
+        `;
+
+        // Añadimos el delay dinámico para crear el efecto cascada (se declara después del cssText)
+        div.style.transitionDelay = `${(index % 4) * 0.15}s`;
 
         const imagenPortada = producto.imagen || 'assets/img/placeholder.png';
         const precioReal = producto.precio || 0;
 
         div.innerHTML = `
-            <a href="detalle.html?id=${producto.id}" target="_blank" style="text-decoration: none; color: inherit; display: block; position: relative;">
-                <img src="${imagenPortada}" alt="${producto.nombre}" loading="lazy" style="width: 100%; aspect-ratio: 1/1; object-fit: cover;">
+            <a href="detalle.html?id=${producto.id}" style="text-decoration: none; color: inherit; display: block; position: relative;">
+                ${producto.stock !== undefined && producto.stock > 0 && producto.stock < 5 ? `<span style="position:absolute; top:12px; left:12px; background: var(--accent-color); color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; z-index: 2; letter-spacing: 1px;">¡ÚLTIMAS UNIDADES!</span>` : ''}
                 
-                <div style="padding: 15px; text-align: center;">
-                    <h3 style="margin: 0 0 8px 0; font-size: 1rem; color: #ffffff;">${producto.nombre}</h3>
-                    <p class="precio" style="margin: 0; font-weight: bold; font-size: 1.2rem; color: #ffffff;">$${precioReal.toFixed(2)}</p>
+                <img src="${imagenPortada}" alt="${producto.nombre}" loading="lazy" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #f9f9f9;">
+                
+                <div style="padding: 20px; text-align: center;">
+                    <h3 style="margin: 0 0 8px 0; font-size: 1.2rem; color: var(--text-color); font-weight: 600;">${producto.nombre}</h3>
+                    <p class="precio" style="margin: 0; font-weight: bold; font-size: 1.3rem; color: var(--accent-color);">$${precioReal.toFixed(2)}</p>
                 </div>
             </a>
             
-            <div style="padding: 0 15px 15px 15px;">
-                <button onclick="agregarAlCarrito(${producto.id})" style="width: 100%; padding: 10px; background: #ffffff; color: #000000; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background 0.2s;">
-                    Agregar al carrito
+            <div style="padding: 0 20px 20px 20px; margin-top: auto;">
+                <button onclick="agregarAlCarrito(${producto.id})" style="width: 100%; padding: 12px; background: var(--text-color); color: var(--card-bg); border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background 0.3s ease; font-size: 0.95rem; font-family: 'Montserrat', sans-serif;">
+                    <i class="fa-solid fa-cart-plus" style="margin-right: 8px;"></i> AGREGAR
                 </button>
             </div>
         `;
         
-        // Efecto hover: Al pasar el mouse, la tarjeta sube un poco y el borde se ilumina en blanco
+        // 3. Efecto Hover estilo Boutique (sombra suave y botón que cambia al color acento)
         div.onmouseover = () => {
-            div.style.transform = "translateY(-5px)";
-            div.style.borderColor = "#ffffff";
-            div.style.boxShadow = "0 5px 15px rgba(255,255,255,0.1)";
+            div.style.transitionDelay = "0s"; // Quitamos el delay del scroll para que reaccione rápido
+            div.style.transform = "translateY(-8px)";
+            div.style.boxShadow = "0 12px 24px rgba(0,0,0,0.06)";
+            div.style.borderColor = "transparent";
+            div.querySelector('button').style.background = "var(--accent-color)";
         };
         div.onmouseout = () => {
+            div.style.transitionDelay = "0s"; 
             div.style.transform = "translateY(0)";
-            div.style.borderColor = "#333333";
             div.style.boxShadow = "none";
+            div.style.borderColor = "var(--border-color)";
+            div.querySelector('button').style.background = "var(--text-color)";
         };
         
         contenedor.appendChild(div);
+        
+        // 4. Conectamos la tarjeta al sensor de scroll para que se anime
+        observadorScroll.observe(div);
     });
-
+}
 
 // ==========================================
 // 📸 LÓGICA DE LA GALERÍA DE FOTOS
@@ -272,7 +258,7 @@ function actualizarCarrito() {
     if (carrito.length === 0) {
         contenedorItemsCarrito.innerHTML = '<p class="carrito-vacio">El carrito está vacío.</p>';
         totalCarritoDOM.innerText = '$0.00';
-        document.querySelector('.btn-carrito').innerHTML = `<i class="fa-solid fa-bag-shopping"></i> (0)`;
+        document.querySelector('.btn-carrito').innerHTML = `<i class="fa-solid fa-cart-shopping"></i> (0)`;
         return;
     }
 
@@ -282,7 +268,7 @@ function actualizarCarrito() {
         div.classList.add('item-carrito');
         div.innerHTML = `
             <div class="item-info">
-                <h4>${item.nombre} )</h4>
+                <h4>${item.nombre}</h4>
                 <p class="item-precio">$${item.precio.toFixed(2)}</p>
             </div>
             <button class="btn-eliminar" onclick="eliminarDelCarrito(${item.id})">X</button>
@@ -305,7 +291,6 @@ function eliminarDelCarrito(id) {
     actualizarCarrito();
 }
 
-// 5. LÓGICA DE WHATSAPP
 // 5. REDIRIGIR A LA PASARELA DE PAGO (Checkout)
 const btnPagar = document.querySelector('.btn-pagar');
 
