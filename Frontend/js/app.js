@@ -136,38 +136,44 @@ function renderizarProductos() {
         const precioReal = producto.precio || 0;
 
         div.innerHTML = `
-            <a href="detalle.html?id=${producto.id}" style="text-decoration: none; color: inherit; display: block; position: relative;">
-                ${producto.stock !== undefined && producto.stock > 0 && producto.stock < 5 ? `<span style="position:absolute; top:12px; left:12px; background: var(--accent-color); color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; z-index: 2; letter-spacing: 1px;">¡ÚLTIMAS UNIDADES!</span>` : ''}
-                
+            <a href="detalle.html?id=${producto.id}" class="tarjeta-link" style="text-decoration: none; color: inherit; display: block; position: relative; overflow: hidden;">
+                ${producto.stock !== undefined && producto.stock > 0 && producto.stock < 5 ? `<span style="position:absolute; top:12px; left:12px; background: #ff4444; color: #ffffff; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; z-index: 2; letter-spacing: 1px;">¡ÚLTIMAS UNIDADES!</span>` : ''}
+
                 <img src="${imagenPortada}" alt="${producto.nombre}" loading="lazy" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #f9f9f9;">
-                
+
+                <div class="tarjeta-ver-detalle" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background: rgba(0,0,0,0.45); opacity:0; transition: opacity 0.25s ease; pointer-events:none;">
+                    <span style="border: 1px solid #fff; color:#fff; padding: 8px 18px; font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; border-radius: 4px;">VER DETALLE</span>
+                </div>
+
                 <div style="padding: 20px; text-align: center;">
                     <h3 style="margin: 0 0 8px 0; font-size: 1.2rem; color: var(--text-color); font-weight: 600;">${producto.nombre}</h3>
-                    <p class="precio" style="margin: 0; font-weight: bold; font-size: 1.3rem; color: var(--accent-color);">$${precioReal.toFixed(2)}</p>
+                    <p class="precio" style="margin: 0; font-weight: bold; font-size: 1.3rem; color: var(--accent-color);">€${precioReal.toFixed(2)}</p>
                 </div>
             </a>
-            
+
             <div style="padding: 0 20px 20px 20px; margin-top: auto;">
                 <button onclick="agregarAlCarrito(${producto.id})" style="width: 100%; padding: 12px; background: var(--text-color); color: var(--card-bg); border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background 0.3s ease; font-size: 0.95rem; font-family: 'Montserrat', sans-serif;">
                     <i class="fa-solid fa-cart-plus" style="margin-right: 8px;"></i> AGREGAR
                 </button>
             </div>
         `;
-        
-        // 3. Efecto Hover estilo Boutique (sombra suave y botón que cambia al color acento)
+
+        // 3. Efecto Hover estilo Boutique (sombra suave, overlay "ver detalle" y botón que cambia al color acento)
         div.onmouseover = () => {
             div.style.transitionDelay = "0s"; // Quitamos el delay del scroll para que reaccione rápido
             div.style.transform = "translateY(-8px)";
             div.style.boxShadow = "0 12px 24px rgba(0,0,0,0.06)";
             div.style.borderColor = "transparent";
             div.querySelector('button').style.background = "var(--accent-color)";
+            div.querySelector('.tarjeta-ver-detalle').style.opacity = "1";
         };
         div.onmouseout = () => {
-            div.style.transitionDelay = "0s"; 
+            div.style.transitionDelay = "0s";
             div.style.transform = "translateY(0)";
             div.style.boxShadow = "none";
             div.style.borderColor = "var(--border-color)";
             div.querySelector('button').style.background = "var(--text-color)";
+            div.querySelector('.tarjeta-ver-detalle').style.opacity = "0";
         };
         
         contenedor.appendChild(div);
@@ -257,7 +263,7 @@ function actualizarCarrito() {
     
     if (carrito.length === 0) {
         contenedorItemsCarrito.innerHTML = '<p class="carrito-vacio">El carrito está vacío.</p>';
-        totalCarritoDOM.innerText = '$0.00';
+        totalCarritoDOM.innerText = '€0.00';
         document.querySelector('.btn-carrito').innerHTML = `<i class="fa-solid fa-cart-shopping"></i> (0)`;
         return;
     }
@@ -269,7 +275,7 @@ function actualizarCarrito() {
         div.innerHTML = `
             <div class="item-info">
                 <h4>${item.nombre}</h4>
-                <p class="item-precio">$${item.precio.toFixed(2)}</p>
+                <p class="item-precio">€${item.precio.toFixed(2)}</p>
             </div>
             <button class="btn-eliminar" onclick="eliminarDelCarrito(${item.id})">X</button>
         `;
@@ -277,7 +283,7 @@ function actualizarCarrito() {
         total += item.precio;
     });
 
-    totalCarritoDOM.innerText = `$${total.toFixed(2)}`;
+    totalCarritoDOM.innerText = `€${total.toFixed(2)}`;
     document.querySelector('.btn-carrito').innerHTML = `<i class="fa-solid fa-bag-shopping"></i> (${carrito.length})`;
 }
 

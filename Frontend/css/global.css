@@ -115,9 +115,14 @@ button, .btn-wa {
     animation: latido-wa 2.5s infinite; /* Latido más lento */
 }
 
-.whatsapp-flotante:hover { 
-    background-color: #1ebe57; 
-    transform: scale(1.05); 
+.whatsapp-flotante:hover {
+    background-color: #1ebe57;
+    transform: scale(1.05);
+}
+
+/* Evita que tape el botón "Proceder al pago" cuando el carrito está abierto */
+.carrito-panel.abierto ~ .whatsapp-flotante {
+    display: none;
 }
 
 @keyframes latido-wa { 

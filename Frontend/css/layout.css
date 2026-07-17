@@ -14,53 +14,97 @@ body {
 }
 
 /* ==========================================
-   ESTILOS DEL BANNER MINIMALISTA Y LOGO
+   HERO PRINCIPAL (full-bleed con imagen)
    ========================================== */
-.hero-catalogo {
-    background-color: #050505;
+.hero-full {
+    position: relative;
     width: 100%;
+    height: 78vh;
+    min-height: 480px;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    /* Eliminamos cualquier margen o borde conflictivo anterior */
-    margin: 0;
-    border: none;
-}
-
-.hero-banner {
-    display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 30px 20px;
-    width: 100%;
+    overflow: hidden;
+    margin-top: -86px; /* el header se superpone encima */
 }
 
-.logo-principal {
-    max-width: 100px;
-    height: auto;
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 25%;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0.85) 100%);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 20px;
+    max-width: 640px;
+}
+
+.hero-logo {
+    width: 72px;
+    height: 72px;
     object-fit: contain;
-    border-radius: 50%; /* Suaviza los bordes si la imagen original es jpeg cuadrada */
+    border-radius: 50%;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
 }
 
-/* --- SEPARADOR SUTIL DEGRADADO --- */
-.separador-degradado {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    margin-bottom: 0; 
+.hero-titulo {
+    font-size: 2.6rem;
+    line-height: 1.15;
+    margin-bottom: 12px;
+    color: #ffffff;
+}
+
+.hero-subtitulo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.05rem;
+    color: #dddddd;
+    margin-bottom: 28px;
+}
+
+.hero-cta {
+    display: inline-block;
+    padding: 14px 36px;
+    border: 1px solid #ffffff;
+    color: #ffffff;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    transition: 0.3s;
+}
+
+.hero-cta:hover {
+    background-color: #ffffff;
+    color: #000000;
 }
 
 /* ==========================================
-   HEADER Y NAVEGACIÓN
+   HEADER Y NAVEGACIÓN (superpuesto al hero)
    ========================================== */
-.header { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    padding: 20px 50px; 
-    background-color: transparent; /* Permite que se vea el fondo oscuro de body */
-    /* Aseguramos que no queden líneas residuales separando el banner */
-    border-bottom: none !important; 
+.header {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 50px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 100%);
+    border-bottom: none !important;
     box-shadow: none !important;
 }
 
@@ -209,8 +253,13 @@ footer {
 @media (max-width: 768px) {
     .header { padding: 15px 20px; }
     .menu-toggle { display: block; order: -1; }
-    
-    .nav-links { 
+
+    .hero-full { height: 65vh; min-height: 420px; margin-top: -66px; }
+    .hero-titulo { font-size: 1.9rem; }
+    .hero-subtitulo { font-size: 0.95rem; }
+    .hero-logo { width: 60px; height: 60px; }
+
+    .nav-links {
         position: fixed; 
         top: 70px; 
         left: -100%; 
