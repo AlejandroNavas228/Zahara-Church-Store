@@ -31,6 +31,7 @@ const productosZahara = [
         imagen: "assets/img/talita-cumi-portada.jpeg",
         descripcion: "Diseño minimalista en color negro con estampado gráfico en el pecho.",
         imagenes: [
+            "assets/img/talita-cumi-portada.jpeg",
             "assets/img/talita-cumi-cris.jpeg"
         ]
     },
