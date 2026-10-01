@@ -36,7 +36,7 @@ const productosZahara = [
         "assets/img/talita-cumi-cris.jpeg"
     ],
 // "center top", "center 20%", o "contain" si quieres verla completa sin zoom
-    posicionImagen: "contain" 
+    posicionImagen: "top" 
 },
     {
         id: 4,

@@ -21,6 +21,7 @@ function cargarDetalle() {
     
     // 1. Añadimos esta línea para leer el ajuste
     const ajusteImagen = p.posicionImagen || 'cover'; 
+    const posicion = p.posicionImagen || 'center';
     
     const arrayFotos = (p.imagenes && p.imagenes.length > 0) ? p.imagenes : [p.imagen];
     
@@ -36,12 +37,12 @@ function cargarDetalle() {
         galeriaHTML = `<div style="display: flex; gap: 15px; margin-top: 20px; overflow-x: auto; padding-bottom: 10px;">${miniaturas}</div>`;
     }
 
-    document.getElementById('info-producto').innerHTML = `
+   document.getElementById('info-producto').innerHTML = `
         <div class="grid-detalle" style="display: flex; flex-wrap: wrap; gap: 50px; max-width: 1100px; margin: 0 auto; padding: 40px 20px; width: 100%;">
             
             <div class="col-imagen" style="flex: 1; min-width: 320px;">
-                <!-- 2. Cambiamos 'cover' por '\${ajusteImagen}' aquí abajo -->
-                <img id="foto-principal" src="${arrayFotos[0]}" alt="${p.nombre}" style="width: 100\%; aspect-ratio: 1/1; object-fit: ${ajusteImagen}; border-radius: 12px; background: #111;">
+                <!-- Mantenemos object-fit: cover y añadimos object-position -->
+                <img id="foto-principal" src="${arrayFotos[0]}" alt="${p.nombre}" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; object-position: ${posicion}; border-radius: 12px; background: #111;">
                 ${galeriaHTML}
             </div>
             
