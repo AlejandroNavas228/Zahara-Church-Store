@@ -19,12 +19,12 @@ function cargarDetalle() {
 
     const descripcion = p.descripcion || 'Sin descripción detallada por el momento. Una prenda con el diseño y la calidad exclusiva de Zahara Store.';
     
-    // --- LÓGICA DE LA GALERÍA ---
-    // Si el producto tiene un array de 'imagenes', lo usamos. Si no, metemos la 'imagen' principal en un array.
+    // 1. Añadimos esta línea para leer el ajuste
+    const ajusteImagen = p.posicionImagen || 'cover'; 
+    
     const arrayFotos = (p.imagenes && p.imagenes.length > 0) ? p.imagenes : [p.imagen];
     
     let galeriaHTML = '';
-    // Solo mostramos la barra de miniaturas si hay más de 1 foto
     if (arrayFotos.length > 1) {
         let miniaturas = arrayFotos.map((foto, index) => {
             return `<img src="${foto}" 
@@ -36,13 +36,12 @@ function cargarDetalle() {
         galeriaHTML = `<div style="display: flex; gap: 15px; margin-top: 20px; overflow-x: auto; padding-bottom: 10px;">${miniaturas}</div>`;
     }
 
-    // Inyectamos el diseño (usando Flexbox directamente para que no dependas de CSS extra)
     document.getElementById('info-producto').innerHTML = `
         <div class="grid-detalle" style="display: flex; flex-wrap: wrap; gap: 50px; max-width: 1100px; margin: 0 auto; padding: 40px 20px; width: 100%;">
             
-            <!-- Columna de la Galería -->
             <div class="col-imagen" style="flex: 1; min-width: 320px;">
-                <img id="foto-principal" src="${arrayFotos[0]}" alt="${p.nombre}" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; background: #111;">
+                <!-- 2. Cambiamos 'cover' por '\${ajusteImagen}' aquí abajo -->
+                <img id="foto-principal" src="${arrayFotos[0]}" alt="${p.nombre}" style="width: 100\%; aspect-ratio: 1/1; object-fit: ${ajusteImagen}; border-radius: 12px; background: #111;">
                 ${galeriaHTML}
             </div>
             
