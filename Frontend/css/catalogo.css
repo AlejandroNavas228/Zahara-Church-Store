@@ -8,12 +8,15 @@
 .producto img { 
     width: 100%; 
     aspect-ratio: 1 / 1; 
-    object-fit: contain; 
+    object-fit: cover; 
     border-radius: 6px; 
+    object-position: top;
     background-color: #111; 
     margin-bottom: 12px; 
     cursor: pointer; 
 }
+
+
 .producto-info-fila { display: flex; justify-content: space-between; align-items: center; padding: 0 5px; }
 .producto-textos h3 { font-size: 1.1rem; color: #ffffff; margin-bottom: 5px; text-transform: none; }
 .producto-textos .precio { font-weight: bold; font-size: 1.2rem; color: #ffffff; margin: 0; }
