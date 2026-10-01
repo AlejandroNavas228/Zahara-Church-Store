@@ -28,7 +28,7 @@ const productosZahara = [
         id: 3,
         nombre: "TALITA CUMI",
         precio: 20.00,
-        imagen: "assets/img/talita-cumi-cris.jpeg",
+        imagen: "assets/img/talita-cumi-portada.jpeg",
         descripcion: "Diseño minimalista en color negro con estampado gráfico en el pecho.",
         imagenes: [
             "assets/img/talita-cumi-cris.jpeg"
