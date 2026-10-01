@@ -24,17 +24,20 @@ const productosZahara = [
             "assets/img/atento-a-yhwh-2-fotos.jpeg"
         ]
     },
-    {
-        id: 3,
-        nombre: "TALITA CUMI",
-        precio: 20.00,
-        imagen: "assets/img/talita-cumi-portada.jpeg",
-        descripcion: "Diseño minimalista en color negro con estampado gráfico en el pecho.",
-        imagenes: [
-            "assets/img/talita-cumi-portada.jpeg",
-            "assets/img/talita-cumi-cris.jpeg"
-        ]
-    },
+
+  {
+    id: 3,
+    nombre: "TALITA CUMI",
+    precio: 20.00,
+    imagen: "assets/img/talita-cumi-portada.jpeg",
+    descripcion: "Diseño minimalista en color negro con estampado gráfico en el pecho.",
+    imagenes: [
+        "assets/img/talita-cumi-portada.jpeg",
+        "assets/img/talita-cumi-cris.jpeg"
+    ],
+// "center top", "center 20%", o "contain" si quieres verla completa sin zoom
+    posicionImagen: "contain" 
+},
     {
         id: 4,
         nombre: "JESUS",
