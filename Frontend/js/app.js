@@ -134,12 +134,17 @@ function renderizarProductos() {
 
         const imagenPortada = producto.imagen || 'assets/img/placeholder.png';
         const precioReal = producto.precio || 0;
+        
+        // Leemos tu configuración de productos.js (contain vs cover)
+        const ajusteImagen = producto.posicionImagen || 'cover';
 
         div.innerHTML = `
+            <!-- Volvemos al enlace <a> hacia detalle.html -->
             <a href="detalle.html?id=${producto.id}" class="tarjeta-link" style="text-decoration: none; color: inherit; display: block; position: relative; overflow: hidden;">
                 ${producto.stock !== undefined && producto.stock > 0 && producto.stock < 5 ? `<span style="position:absolute; top:12px; left:12px; background: #ff4444; color: #ffffff; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; z-index: 2; letter-spacing: 1px;">¡ÚLTIMAS UNIDADES!</span>` : ''}
 
-                <img src="${imagenPortada}" alt="${producto.nombre}" loading="lazy" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #f9f9f9;">
+                <!-- Aplicamos la variable de ajuste aquí -->
+                <img src="${imagenPortada}" alt="${producto.nombre}" loading="lazy" style="width: 100\%; aspect-ratio: 1/1; object-fit: ${ajusteImagen}; background: #f9f9f9;">
 
                 <div class="tarjeta-ver-detalle" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background: rgba(0,0,0,0.45); opacity:0; transition: opacity 0.25s ease; pointer-events:none;">
                     <span style="border: 1px solid #fff; color:#fff; padding: 8px 18px; font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; border-radius: 4px;">VER DETALLE</span>
