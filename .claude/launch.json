@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "zonegame-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "C:/Users/aleja_phpzuv7/Desktop/Workspace/zonegame"],
+      "port": 3000
+    }
+  ]
+}
